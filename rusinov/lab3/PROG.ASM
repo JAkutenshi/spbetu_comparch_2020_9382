@@ -26,8 +26,7 @@ f1:
 
                        ; если попали сюда, то a > b (ja)
     mov ax, i          ; переменная i в ax
-    mov bx, 4h         ; 4 в bx
-    mul bx;            ; ax = ax * bx = i * 4
+    shl ax, 2          ; умножим i на 4
     mov bx, 7h         ; кладем в bx 7
     sub bx, ax         ; bx - ax = 7 - i * 4
     mov i1, bx         ; записываем в i1 результат 7 - i * 4
@@ -35,8 +34,13 @@ f1:
 
 f1_jle:                ; a <= b
     mov ax, i          ; переменная i в ax
-    mov bx, 6h         ; 6 в bx
-    mul bx;            ; ax = ax * bx = i * 6
+    mov bx, i          ; переменная i в bx
+
+    shl ax, 2          ; домножим ax на 4
+    shl bx             ; домножим bx на 2
+    add ax, bx         ; прибавим к ax bx, получим 6 * i
+
+
     mov bx, 8h         ; кладем в bx 8
     sub bx, ax         ; bx - ax = 8 - i * 6
     mov i1, bx         ; записываем в i1 результат 8 - i * 6
@@ -50,8 +54,7 @@ f2:
                        ; если попали сюда, то a > b (ja)
     mov ax, 1h         ; кладем в ax 1
     add ax, i          ; ax = 1 + i
-    mov bx, 2h         ; кладем в bx 2
-    mul bx             ; ax = ax * bx = (1 + i) * 2
+    shl ax             ; домножим ax на 2
     sub ax, 4h         ; ax = ax - 4
     mov i2, ax         ; записываем в i2 результат (1 + i) * 2 - 4
     jmp f3             ; переходим к f3
@@ -59,8 +62,11 @@ f2:
 f2_jle:
     mov ax, 1h         ; кладем в ax 1
     add ax, i          ; ax = 1 + i
-    mov bx, 3h         ; кладем в bx 3
-    mul bx             ; ax = ax * bx = (1 + i) * 3
+    mov bx, ax         ; кладем в bx i + 1
+
+    shl ax             ; домножим ax на 2
+    add ax, bx         ; прибавим i + 1 и получим (i+1)*3
+
     mov bx, 5h         ; кладем в bx 5
     sub bx, ax         ; bx - ax = 5 - (1 + i) * 3
     mov i2, bx         ; записываем в i2 результат 5 - (1 + i) * 3
