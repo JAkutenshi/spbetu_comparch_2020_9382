@@ -90,12 +90,12 @@ f3_ABS:
 
 f3_jl_result:
     cmp ax, 2h         ; сравним |i1 - i2| с 2
-    je f3_jl_result_jge; если |i1 - i2| >= 2, переместимся в f3_jl_result_jge
-    mov res, 2h        ; |i1 - i2| < 2 => res = 2
+    jge f3_jl_result_jge; если |i1 - i2| >= 2, переместимся в f3_jl_result_jge
+    mov res, ax        ; |i1 - i2| < 2 => res = |i1 - i2|
     jmp end_f          ; завершаем программу
 
 f3_jl_result_jge:
-    mov res, ax        ; |i1 - i2| >= 2 => res = |i1 - i2|
+    mov res, 2h        ; |i1 - i2| >= 2 => res = |i1 - i2|
     jmp end_f          ; завершаем программу
 
 f3_jge:                ; k >= 0
