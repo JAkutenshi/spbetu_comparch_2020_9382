@@ -6,7 +6,7 @@ DATA SEGMENT
 	A 	DW 4
 	B 	DW 2
 	I 	DW 1
-	K 	DW -1
+	K 	DW 3
 	I1 	DW ?
 	I2 	DW ?
 	RES DW ?
@@ -19,64 +19,55 @@ Main PROC FAR
 	mov  ax, DATA
    	mov  ds, ax
 f:
-	mov ax, A
+	mov si, A
 	mov bx, B
-	cmp ax, bx
-	jg f1
-	jmp f1_1
+	mov ax, I
+	shl ax, 1
+	cmp si, bx
+	jg f1_1
+	jmp f1
 	
 f1:
-	mov al, I; al = i
-	mov bl, 2; bl = 2
-	mul bl; ax = al*ab
-	mov si, ax; bx = ax
-	mov al, I; al = i
-	mov bl, 8; bl = 8
-	mul bl; ax = lb*al
-	sub si, ax; bx = bx-ax 
-	add si, 4; bx += 4
-	mov I1, si
+	mov bx, I
+	shl bx, 1
+	shl bx, 1
+	shl bx, 1
+	sub ax, bx
+	add ax, 4
+	mov I1, ax
 	jmp f_2
 	
 f1_1:
-	mov al, I
-	mov bl, 3
-	mul bl
+	mov bx, I
+	add ax, bx
 	add ax, 6
 	mov I1, ax
 	jmp f_2
 	
 f_2:
-	mov ax, A
+	mov si, A
 	mov bx, B
-	cmp ax, bx
+	mov ax, I
+	shl ax, 1
+	cmp si, bx
 	jg f2
 	jmp f2_2
 	
 f2:
-	mov al, I; al = i
-	mov bl, 4; bl = 2
-	mul bl; ax = al*ab
-	mov si, ax; bx = ax
-	mov al, I; al = i
-	mov bl, 8; bl = 8
-	mul bl; ax = lb*al
-	sub si, ax; bx = bx-ax 
-	add si, 20
-	mov I2, si
+	shl ax, 1
+	neg ax
+	add ax, 20
+	mov I2, ax
 	jmp f_3
 	
 f2_2:
-	mov al, I; al = i
-	mov bl, 2; bl = 2
-	mul bl; ax = al*ab
-	mov si, ax; bx = ax
-	mov al, I
-	mov bl, 8; bl = 8
-	mul bl; ax = lb*al
-	sub si, ax; bx = bx-ax 
-	sub si, 6
-	mov I2, si
+	mov bx, I
+	shl bx, 1
+	shl bx, 1
+	shl bx, 1
+	sub ax, bx
+	add ax, 6
+	mov I1, ax
 	jmp f_3
 	
 f_3:
