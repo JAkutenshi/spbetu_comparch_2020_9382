@@ -91,8 +91,8 @@ CODE SEGMENT
 		;mov ax,matr[bp+di+si]
 		
 		; Использование сегмента стека
-		;push mem1
-		;push mem2
+		push mem1
+		push mem2
 		mov bp,sp
 		mov dx,[bp]+2
 		ret 2
