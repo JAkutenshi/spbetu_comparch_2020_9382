@@ -12,7 +12,7 @@ git fetch Indiora         # Савельев
 git fetch TestGeorgeH     # Герасев
 git fetch SonKhwa         # Пя
 git fetch dmitrikuz       # Кузьмин
-#git fetch                # 
+git fetch MilanaBalaeva   # Балаева
 #git fetch                # 
 #git fetch                # 
 #git fetch                # 
