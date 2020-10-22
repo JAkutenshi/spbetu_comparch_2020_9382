@@ -15,6 +15,25 @@ ASSUME  DS:DataSG, CS:Code, SS:STACKSG
 
 WRITE_SOME  PROC FAR
 
+	jmp s
+	ST_SS DW 0000
+	ST_SP DW 0000
+	ST_AX DW 0000
+	INT_STACK DW 20 DUP(0)
+
+	s:
+	mov ST_SP,SP ; cохраняю SP
+
+	mov ST_AX,AX
+
+	mov AX,SS
+	mov ST_SS,AX ; сохраняю SS
+
+	mov AX,INT_STACK
+	mov SS,AX ;новый стек
+
+	mov AX,ST_AX
+
 	PUSH AX   ; сохранение изменяемых регистров
 	PUSH DX
 
@@ -37,13 +56,21 @@ WRITE_SOME  PROC FAR
 	POP  DX    ;восстановление регистров
 	POP AX
 
+	mov ST_AX,AX
+
+	mov AX,ST_SS ; восстанавливаю SS
+	mov SS,AX
+
+	mov SP,ST_SP ; восстанавливаю SP
+
+	mov AX,ST_AX
+
+
 	MOV  AL, 20H
 	OUT  20H,AL
+
 	IRET
 
-	ST_SS DW 0000
-	ST_SP DW 0000
-	INT_STACK DW 20 DUP(0)
 
 WRITE_SOME  ENDP
 
