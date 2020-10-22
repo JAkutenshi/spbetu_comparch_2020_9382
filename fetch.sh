@@ -10,8 +10,8 @@ git fetch alexundertable  # Кодуков
 git fetch Homry           # Сорокумов
 git fetch Indiora         # Савельев
 git fetch TestGeorgeH     # Герасев
-#git fetch                # 
-#git fetch                # 
+git fetch SonKhwa         # Пя
+git fetch dmitrikuz       # Кузьмин
 #git fetch                # 
 #git fetch                # 
 #git fetch                # 
