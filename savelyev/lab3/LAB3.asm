@@ -60,8 +60,7 @@ f2:
     add ax, bx         ; ax + bx = i * 6
     mov bx, 8h         ; bx = 8
     add ax, bx         ; i * 6 + 8
-    mov bx, 0h         ; bx = 0
-    sub bx, ax         ; 0 - (i * 6 + 8) neg ax
+    neg ax	       ; *(-1)	
     mov i2, bx
     jmp f3         ; переходим к f3_i2
 
@@ -87,9 +86,9 @@ f2_null:               ; ax != 0
     jmp f3          ; к f3_i2
 
 f3:
-	mov bx, k           ; bx = k
-	cmp bx, 0           ; сравниваем k с 0
-	jl  f3_jl_up        ; k < 0 верхняя ветка
+    mov bx, k           ; bx = k
+    cmp bx, 0           ; сравниваем k с 0
+    jl  f3_jl_up        ; k < 0 верхняя ветка
 
                         ; k >= 0 нижняя ветка
     mov ax, i2		    ; ax = i2
@@ -100,8 +99,8 @@ f3:
     jmp f3_down
 
 f3_i2_c:
-	neg ax              ; меняем знак i2
-	jmp f3_down
+    neg ax              ; меняем знак i2
+    jmp f3_down
 
 f3_down:
     cmp ax, 7
@@ -117,17 +116,17 @@ f3_down_i2:
 
 
 f3_jl_up:
-	mov ax, i1          ; ax = i1
+    mov ax, i1          ; ax = i1
     mov bx, i2          ; bx = i2
     sub ax, bx          ; i1 - i2
-	cmp ax, 0           ; сравниваем i1 - i2 и 0
-	jl f3_jl_up_c       ; i1 < 0
+    cmp ax, 0           ; сравниваем i1 - i2 и 0
+    jl f3_jl_up_c       ; i1 < 0
 
     mov res, ax         ; i1 >= 0
     jmp end_f
 
 f3_jl_up_c:
-	neg ax              ; меняем знак i1
+    neg ax              ; меняем знак i1
     mov res, ax         ; i1 > 0
     jmp end_f
 
