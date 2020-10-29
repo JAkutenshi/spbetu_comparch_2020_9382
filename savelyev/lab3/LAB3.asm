@@ -49,29 +49,23 @@ f2_jle:
     shl bx, 1          ; i * 2
     add ax, bx         ; ax + bx = i * 6
     shr ax, 1          ; (i * 6) / 2 = i * 3
-    mov bx, 9h         ; bx = 9
-    sub bx, ax         ; bx - ax = -3i + 12
+    sub 9, ax         ; bx - ax = -3i + 12
     mov i2, bx
-    jmp f1            ; к f3_i2
+    jmp f1_jle            ; к f3_i2
 
 f1:
-    mov ax, a          ; ax = a
-    cmp	ax, b	       ; сравниваем переменные a и b соответственно
-    jle f1_jle         ; a <= b
 
                        ; если попали сюда, то a > b
     mov ax, i          ; ax = i
     shl ax, 1          ; i * 4
     shl ax, 1
-    mov bx, 7h         ; bx = 7
-    sub bx, ax         ; bx - ax = 7 - i * 4
+    sub 7, ax         ; bx - ax = 7 - i * 4
     mov i1, bx         ; i1 = bx - ax = 7 - i * 4
     jmp f2             ; переходим к f2
 
 f1_jle:                ; a <= b
     shl bx, 1          ; bx * 2
-    mov ax, -16h
-    sub bx, ax
+    sub bx, 16
     mov i1, bx
     jmp f2             ; переходим к f2
 
@@ -107,8 +101,7 @@ f3_down_i2:
 
 
 f3_jl_up:
-     mov ax, i1          ; ax = i1
-     sub ax, i2           ; i1 - i2
+     sub i1, i2           ; i1 - i2
      cmp ax, 0           ; сравниваем i1 - i2 и 0
      jl f3_jl_up_c       ; i1 < 0
 
