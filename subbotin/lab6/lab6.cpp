@@ -1,12 +1,14 @@
 #include <iostream>
 #include <fstream>
 #include <ctime>
+#include <random>
 using namespace std;
 int64_t getRandomNumber(int64_t min, int64_t max)
 {
-    static const double fraction = 1.0 / (static_cast<double>(RAND_MAX) + 1.0);
-    // Равномерно распределяем рандомное число в нашем диапазоне
-    return static_cast<int>(rand() * fraction * (max - min + 1) + min);
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_int_distribution<int> dist(min, max);
+    return dist(mt);
 }
 
 extern "C"
@@ -78,6 +80,10 @@ int main()
             myfile << "    " << i+1 << "\t\t    " << res << "\t\t   " << res_arr[i] << endl;
         }
     }
-
+    cout << "\nN_interval\tL_borders\tN_number\n";
+    for (int64_t i = 0; i < intervals_number; i++) {
+            int64_t res = i != 0 ? left_boarders[i - 1] : x_min;
+            cout << "    " << i+1 << "\t\t    " << res << "\t\t   " << res_arr[i] << endl;
+        }
 }
 
