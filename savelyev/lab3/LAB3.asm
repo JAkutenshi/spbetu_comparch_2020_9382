@@ -107,11 +107,10 @@ f3_down_i2:
 
 
 f3_jl_up:
-	mov ax, i1          ; ax = i1
-    mov bx, i2          ; bx = i2 sub ax, a1
-    sub ax, bx          ; i1 - i2
-	cmp ax, 0           ; сравниваем i1 - i2 и 0
-	jl f3_jl_up_c       ; i1 < 0
+     mov ax, i1          ; ax = i1
+     sub ax, i2           ; i1 - i2
+     cmp ax, 0           ; сравниваем i1 - i2 и 0
+     jl f3_jl_up_c       ; i1 < 0
 
     mov res, ax         ; i1 >= 0
     jmp end_f
