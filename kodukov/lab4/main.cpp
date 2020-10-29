@@ -40,6 +40,7 @@ int main() {
 			jle digit
 			cmp al, 'A'
 			jge letter
+			jmp writeSymbol
 		digit:
 			sub al, '0'
 			jmp tobin
