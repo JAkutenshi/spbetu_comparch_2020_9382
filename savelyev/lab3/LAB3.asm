@@ -33,23 +33,22 @@ f2:
     mov bx, i          ; bx = i
     shl bx, 1          ; i * 2
     add ax, bx         ; ax + bx = i * 6
-    mov bx, 8h         ; bx = 8
-    add ax, bx         ; i * 6 + 8
+    add ax, 8         ; i * 6 + 8
     neg ax             ; * (-1)
     mov i2, ax
     jmp f1         ; переходим к f3_i2
 
 f2_jle:
     mov ax, i          ; ax = i
-    mov bx, 1h
-    sub ax, bx         ; ax = i - 1
+    sub ax, 1         ; ax = i - 1
     mov bx, ax         ; bx = i - 1
     shl ax, 1          ; i * 4
     shl ax, 1
     shl bx, 1          ; i * 2
     add ax, bx         ; ax + bx = i * 6
     shr ax, 1          ; (i * 6) / 2 = i * 3
-    sub 9, ax         ; bx - ax = -3i + 12
+    mov bx, 9
+    sub bx, ax         ; bx - ax = -3i + 12
     mov i2, bx
     jmp f1_jle            ; к f3_i2
 
@@ -59,7 +58,8 @@ f1:
     mov ax, i          ; ax = i
     shl ax, 1          ; i * 4
     shl ax, 1
-    sub 7, ax         ; bx - ax = 7 - i * 4
+    mov bx, 7
+    sub bx, ax         ; bx - ax = 7 - i * 4
     mov i1, bx         ; i1 = bx - ax = 7 - i * 4
     jmp f2             ; переходим к f2
 
@@ -105,8 +105,8 @@ f3_jl_up:
      cmp ax, 0           ; сравниваем i1 - i2 и 0
      jl f3_jl_up_c       ; i1 < 0
 
-    mov res, ax         ; i1 >= 0
-    jmp end_f
+     mov res, ax         ; i1 >= 0
+     jmp end_f
 
 f3_jl_up_c:
 	neg ax              ; меняем знак i1
