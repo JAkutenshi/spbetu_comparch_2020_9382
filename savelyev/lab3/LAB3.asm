@@ -3,10 +3,10 @@ ASTACK SEGMENT STACK
 ASTACK ENDS
 
 DATA SEGMENT
-    a	    DW	-1h
-    b	    DW	1h
+    a	    DW	1h
+    b	    DW	-1h
     i	    DW	1h
-    k       DW  1h
+    k       DW  -1h
     i1      DW  0
     i2      DW  0
     res     DW  0
@@ -60,30 +60,24 @@ f2:
     add ax, bx         ; ax + bx = i * 6
     mov bx, 8h         ; bx = 8
     add ax, bx         ; i * 6 + 8
-    neg ax	       ; *(-1)	
-    mov i2, bx
+    neg ax             ; * (-1)
+    mov i2, ax
     jmp f3         ; переходим к f3_i2
 
 f2_jle:
     mov ax, i          ; ax = i
     mov bx, 1h
-    sub ax, bx         ; i - 1
-    cmp ax, 0
-    je f2_null         ; ax == 0
-
+    sub ax, bx         ; ax = i - 1
+    mov bx, ax         ; bx = i - 1
     shl ax, 1          ; i * 4
     shl ax, 1
-    mov bx, i          ; bx = i
     shl bx, 1          ; i * 2
     add ax, bx         ; ax + bx = i * 6
     shr ax, 1          ; (i * 6) / 2 = i * 3
-
-f2_null:               ; ax != 0
-
     mov bx, 9h         ; bx = 9
     sub bx, ax         ; bx - ax
     mov i2, bx
-    jmp f3          ; к f3_i2
+    jmp f3             ; к f3_i2
 
 f3:
     mov bx, k           ; bx = k
@@ -91,9 +85,9 @@ f3:
     jl  f3_jl_up        ; k < 0 верхняя ветка
 
                         ; k >= 0 нижняя ветка
-    mov ax, i2		    ; ax = i2
-    cmp	ax, 0			; сравниваем i2 и 0
-    jl	f3_i2_c	        ; если i2 < 0
+    mov ax, i2	      ; ax = i2
+    cmp	ax, 0	      ; сравниваем i2 и 0
+    jl	f3_i2_c	      ; если i2 < 0
 
                         ; i2 >= 0
     jmp f3_down
