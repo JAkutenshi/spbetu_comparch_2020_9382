@@ -26,22 +26,19 @@ ASSUME SS:AStack, DS:Data, CS:Code
        mov  ax, a   
        mov  bx, b
 	   cmp ax, bx
-	   jle firstf1f2
+	   jg firstf1f2
 	
 	secondf1f2:
 		mov cx, i
 		shl cx, 1
-		shl cx, 1
-		add cx, i
 		add cx, i
 		sub cx, 10
-		mov f1, cx
-		mov cx, i
-		shl cx,1
-		add cx, i
 		neg cx
-		add cx, 10 
 		mov f2, cx
+		sub cx, 5
+		shl cx,1
+		neg cx
+		mov f1, cx
 		jmp firstf3
 		
 	firstf1f2:
