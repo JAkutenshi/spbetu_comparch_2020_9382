@@ -25,19 +25,10 @@ ASSUME SS:AStack, DS:Data, CS:Code
        mov ds,ax 
        mov  ax, a   
        mov  bx, b
- 
-   firstf1:
-		cmp   ax, bx
-		jle secondf1
-		mov cx, i
-		shl cx, 1
-		shl cx, 1
-		add cx, 3 
-		neg cx
-		mov f1, cx
-		jmp firstf2
-		
-	secondf1:
+	   cmp ax, bx
+	   jle firstf1f2
+	
+	secondf1f2:
 		mov cx, i
 		shl cx, 1
 		shl cx, 1
@@ -45,45 +36,49 @@ ASSUME SS:AStack, DS:Data, CS:Code
 		add cx, i
 		sub cx, 10
 		mov f1, cx
-		jmp firstf2
-			
-		
-	firstf2:
-		cmp   ax, bx
-		jg secondf2
 		mov cx, i
-		mov cx, 2
-		sal cx, 1
-		sub cx, 5 
-		mov f2, cx
-		jmp firstf3
-		
-	secondf2:
-	
-		mov cx, i
-		sal cx,1
+		shl cx,1
 		add cx, i
+		neg cx
 		add cx, 10 
 		mov f2, cx
 		jmp firstf3
 		
+	firstf1f2:
+		mov cx, i
+		shl cx, 1
+		shl cx, 1
+		add cx, 3 
+		neg cx
+		mov f1, cx
+		mov cx, i
+		shl cx, 1
+		shl cx, 1
+		sub cx, 5 
+		neg cx
+		mov f2, cx
+		
 	firstf3:
-	
 		mov cx, k
 		cmp cx, 0
 		jl secondf3
 		mov cx, f1
 		sub cx, f2
 		cmp cx, 0
+		jle getreswithneg
 		cmp cx, 2
-		jle getres1
-		getres1:
-		mov ax, cx
+		jle get1
+		mov f3, 2
 		jmp exit
-		mov ax, 2
-		jl abs_
-		abs_:
+		get1:
+		mov f3, cx
+		jmp exit
+	getreswithneg:
 		neg cx
+		cmp cx, 2
+		jle get1
+		mov f3, cx
+		jmp exit
 		
 	secondf3:
 		mov cx, 6
@@ -92,12 +87,11 @@ ASSUME SS:AStack, DS:Data, CS:Code
 		neg dx
 		cmp dx, cx
 		jge getres2
+		mov f3, cx
+		jmp exit
 		getres2:
-		mov ax, cx
+		mov f3, dx
 		jmp exit
-		mov ax, cx
-		jmp exit
-		
 	exit:
 		mov ah, 4ch
 		int 21h
