@@ -1,69 +1,70 @@
 #include <iostream>
+#include <fstream>
 
-int main()
-{
+#define n 80
+int main() {
+    system("chcp 1251 > nul");
+    setlocale(LC_CTYPE, "rus");
     std::cout << "Работу выполнил: студент группы 9382 Русинов Дмитрий" << std::endl;
     std::cout << "Вид преобразования: 5. Преобразование всех строчных латинских букв входной строки в" << std::endl;
     std::cout << "заглавные, а десятичных цифр в инверсные, остальные символы входной строки" << std::endl;
     std::cout << "передаются в выходную строку непосредственно." << std::endl;
-    char *input = new char[80];
-    char *output = new char[80];
+    char str[n + 1];
+    char answer[n + 1];
+    std::cout << "Введите строку для обработки:\n";
+    std::cin.getline(str, n + 1);
+    std::cout << "Строка до обработки:\n" << str << "\n";
+    _asm{
+            mov ecx, n;длина строки в ecx
+            mov al, 0
+            lea    si, str; кладем в ds:si адрес str
+            lea di, answer; кладем в es:di адрес answer
+            cld; обнуление флага направления
 
-    std::cout<<"Входная строка: ";
-    std::cin.getline(input, 80);
+            digit:
+            lodsb; копирует один байт из памяти по адресу ds:si в регистр al
+            cmp al, '0'
+            jl character
+            cmp al, '9'
+            jg character
+            sub al, '9'
+            neg al
+            add al, '0'
+            jmp print
 
-    asm("mov  %0,%%rsi\n\t"
-        "mov  %1,%%rdi\n\t"
-        "mov  $80,%%ecx\n\t"
+            character:
+            ;cmp al, 'а'
+            ;jge cyrillic
+            cmp al, 'a'
+            jl cyrillic
+            cmp al, 'z'
+            jg print
+            sub al, 20h
+            jmp print
 
-        "start:"
-        "lodsb (%%rsi)\n\t"     //загружаем символ в al
-        "cmp $'0',%%al\n\t"     //сравниваем символ с кодом цифры 0
-        "jl character\n\t"      //если меньше, то не цифра, идем дальше к проверке на буквы
-        "cmp $'9',%%al\n\t"     //сравниваем символ с кодом цифры 9
-        "jg character\n\t"      //если больше то не цифра в 10 сс идем к проверке на буквы
-        "sub $'9',%%al\n\t"     //вычитаем 39 чтобы получить цифру [-9...0]
-        "neg %%al\n\t"          //берем модуль числа и получаем инвертированную цифру
-        "add $'0',%%al\n\t"     //прибавляем 30 чтобы получить код цифры
-        "jmp print\n\t"         //переходим к выводу в выходную строку
+            cyrillic:
+            cmp al, 'ё'
+            je yo
+            cmp al, 'а'
+            jl print
+            cmp al, 'я'
+            jg print
+            sub al, 20h
+            jmp print
 
-        "character:\n\t"
-        //"movb %%al,%0\n\t"
-        "cmp $0x80,%%al\n\t "   //сравниваем с символом "А" кириллическая
-        "jge cyrillic\n\t"      //если >=, вероятно, кириллица
-        "cmp $'a',%%al\n\t"     //сравниваем с символом "a"
-        "jl  print\n\t"         //если меньше, то преходим к выводу в выходную строку
-        "cmp $'z',%%al\n\t"     //сравниваем с символом "z"
-        "jg  print\n\t"         //если больше, то выводим
-        "sub $0x20,%%al\n\t"    //получаем заглавную букву
-        "jmp print\n\t"
+            yo:
+            sub al, 10h
 
-        "cyrillic:"
-        "cmp $0xDD,%%al\n\t"    // Проверим на Ё
-        "je yo\n\t"             // Если Ё, то идем менять ее
-        "cmp $0x9F,%%al\n\t"    // Проверим на Я
-        "je ya\n\t"             // Если Я, то идем менять ее
-        "jg print\n\t"          // Если > Я, то печатаем
-        "sub $0x60,%%al\n\t"    // to lower case
-        "jmp print\n\t"
-        ""
+            print:
+            stosb; сохраняет регистр al в ячейке памяти по адресу es:di
+            loop digit
 
-        "yo:"
-        "inc %%al\n\t"          // ё находится после Ё
-        "jmp print\n\t"
-
-        "ya:"
-        "add $0x40,%%al\n\t"    // Я стала я
-
-        "print:"
-        "stosb (%%rdi)\n\t"     //записываем символ в выходную строку
-        "loop start\n\t"        //возвращаемся в start пока ecx!=0
-    ::"a"(input),"b"(output));
-
-    std::cout<<"Выходная строка: " << output << std::endl;
-
-    delete[] input;
-    delete[] output;
-
+            finish_processing:
+            mov al, 0
+            stosb
+    }
+    std::cout << "Вывод обработанной строки:\n" << answer;
+    std::fstream fout("output.txt");
+    fout << "Строка до обработки:\n" << str << "\nВывод обработанной строки:\n" << answer;
     return 0;
 }
