@@ -102,19 +102,19 @@ Main PROC FAR
   MOV AX, SEG INTER_TIMER; сегмент процедуры
   MOV DS, AX; помещаем в DS
   MOV AH, 25H; функция установки вектора
-  MOV AL, 23H; номер вектора
+  MOV AL, 08H; номер вектора
   INT 21H; меняем прерывание
   POP DS
   STI	
   MOV DX, OFFSET GREETING;  
   
-  ;esc_loop:
-  ;mov ah, 10h
-  ;int 16h
-  ;cmp al,27
-  ;jz EXIT
-  ;next:
-  ;loop esc_loop
+  esc_loop:
+  mov ah, 10h
+  int 16h
+  cmp al,27
+  jz EXIT
+  next:
+  loop esc_loop
 
   EXIT:
   CLI
@@ -123,7 +123,7 @@ Main PROC FAR
   MOV AX, KEEP_CS
   MOV DS, AX
   MOV AH, 25H
-  MOV AL, 23H
+  MOV AL, 08H
   INT 21H; восстанавливаем старый вектор прерывания
   POP DS
   STI
