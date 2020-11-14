@@ -13,8 +13,8 @@ git fetch TestGeorgeH     # Герасев
 git fetch SonKhwa         # Пя
 git fetch dmitrikuz       # Кузьмин
 git fetch MilanaBalaeva   # Балаева
-#git fetch                # 
-#git fetch                # 
+git fetch sergeyyurev     # Юрьев
+git fetch Ryzhikh-Roman   # Рыжих
 #git fetch                # 
 #git fetch                # 
 #git fetch                # 

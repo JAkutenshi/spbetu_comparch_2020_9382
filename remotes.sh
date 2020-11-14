@@ -13,8 +13,8 @@ git remote add TestGeorgeH               https://github.com/TestGeorgeH/spbetu_c
 git remote add SonKhwa                   https://github.com/SonKhwa/spbetu_comparch_2020_9382.git            # Пя
 git remote add dmitrikuz                 https://github.com/dmitrikuz/spbetu_comparch_2020_9382.git          # Кузьмин
 git remote add MilanaBalaeva             https://github.com/MilanaBalaeva/spbetu_comparch_2020_9382.git      # Балаева
-#git remote add                           https://github.com//spbetu_comparch_2020_9382.git                  # 
-#git remote add                           https://github.com//spbetu_comparch_2020_9382.git                  # 
+git remote add sergeyyurev               https://github.com/sergeyyurev/spbetu_comparch_2020_9382.git     # Юрьев  
+git remote add Ryzhikh-Roman             https://github.com/Ryzhikh-Roman/spbetu_comparch_2020_9382.git     # Рыжих  
 #git remote add                           https://github.com//spbetu_comparch_2020_9382.git                  # 
 #git remote add                           https://github.com//spbetu_comparch_2020_9382.git                  # 
 #git remote add                           https://github.com//spbetu_comparch_2020_9382.git                  # 
