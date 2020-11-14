@@ -5,6 +5,7 @@ stack ends
 data segment
 	i1 dw 0
 	i2 dw 0
+	k dw 0
 	buff    db 4,?,4 Dup(?)
 	
 data ends
@@ -67,35 +68,6 @@ code segment
 	 
 	error db "incorrect number$"
 	input endp
-	
-	
-	
-	result proc near		
-		cmp bx, 0
-		jl less
-		sub cx, dx				; Если k >= 0, находим разность
-		cmp cx, 0				; Если разность < 0, меняем знак, находя модуль
-		jge skip
-		neg cx
-		
-		skip:
-		mov ax, cx				; Запись в ax
-		jmp exit
-		
-		less:
-		sub dx, 10				; Если k < 0, вычитаем из i2 10
-		neg dx					; Меняем знак
-		cmp cx, dx
-		jg greater
-		mov ax, dx				; Находим наибольшее, записываем его в ax
-		jmp exit
-		
-		greater:
-		mov ax, cx
-		
-		exit:
-		ret
-	result endp
 
 	main proc far
 		push ds
@@ -111,13 +83,15 @@ code segment
 		call input
 		mov ds:i2, ax			;ввод b
 		call input
+		mov ds:k, ax			;ввод k
+		call input
 		mov bx, ax				;ввод i
 		
 		mov cx, ds:i1			; Заносим в регистры
 		mov dx, ds:i2
 		
 		cmp cx, dx
-		jg greater1
+		jg greater
 		
 		shl bx, 1
 		shl bx, 1
@@ -126,45 +100,57 @@ code segment
 		sub bx, 8
 		neg bx
 		mov ds:i1, bx
-		jmp next1
 		
-		greater1:
+		neg bx
+		sub bx, ax
+		sub bx, ax				; F2 если а <= b
+		sub bx, ax
+		add bx, 14
+		mov ds:i2, bx
+		
+		jmp next
+		
+		greater:
 		shl bx, 1
 		shl bx, 1				; F1 если a > b
 		sub bx, 7
 		neg bx
 		mov ds:i1, bx
 		
-		next1:
-		mov bx, ax
-		
-		cmp cx, dx
-		jg greater2
-		
-		shl bx, 1
-		add bx, ax
-		add bx, 6				; F2 если a <= b
-		mov ds:i2, bx
-		jmp next2
-		
-		greater2:
-		shl bx, 1
-		shl bx, 1
-		add bx, ax				; F2 если a > b
-		add bx, ax
-		sub bx, 4
-		neg bx
+		sub bx, ax
+		sub bx, ax
+		sub bx, 3				; F1 если a > b
 		mov ds:i2, bx
 		
-		next2:
+		next:
 		
-		call input
-		mov bx, ax		;k
+		mov bx, ds:k		;k
 		mov cx, ds:i1			; Заносим в регистры значения, вычисленные функциями
 		mov dx, ds:i2
+
+		cmp bx, 0
+		jl less
+		sub cx, dx				; Если k >= 0, находим разность
+		cmp cx, 0				; Если разность < 0, меняем знак, находя модуль
+		jge skip
+		neg cx
 		
-		call result				; Вызов процедуры нахождения значения F3 (RES)
+		skip:
+		mov ax, cx				; Запись в ax
+		jmp exit
 		
+		less:
+		sub dx, 10				; Если k < 0, вычитаем из i2 10
+		neg dx					; Меняем знак
+		cmp cx, dx
+		jg greaterres
+		mov ax, dx				; Находим наибольшее, записываем его в ax
+		jmp exit
+		
+		greaterres:
+		mov ax, cx
+		
+		exit:
 		ret
 	main endp
 code ends
