@@ -40,6 +40,7 @@ Main PROC FAR
      add CX, AX
      sal CX, 1
 
+
      mov AX, 4
      sub AX, CX
 
