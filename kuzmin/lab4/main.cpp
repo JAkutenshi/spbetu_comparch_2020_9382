@@ -13,7 +13,7 @@ int main() {
 	std::cout << "Латинская буква: ";
 	a = std::getc(stdin);
 	_asm {
-		mov al, a 
+		mov al, a
 		mov index1, al
 		sub index1, 'a'
 		mov edi, str
@@ -25,14 +25,14 @@ int main() {
 		mov index2, -1
 		jmp end
 
-		found:
-			sub edi, [str]
+		found :
+			sub edi, str
 			mov index2, edi
 
-	    end:
+		end :
 	}
 
-	std::cout << "Номер символа в алфавите: " << (int)index1;
+	std::cout << "Номер символа в алфавите: " << (int)index1 + 1;
 	std::cout << "\nПервое вхождение в строке: " << index2;
 	return 0;
 }
