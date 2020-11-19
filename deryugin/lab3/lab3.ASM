@@ -19,7 +19,6 @@ Main PROC FAR
  sub ax, ax
  push ax
  mov ax, DATA
- sub ax, ax
  mov ds, ax
  sub ax, ax
  mov ax, a
