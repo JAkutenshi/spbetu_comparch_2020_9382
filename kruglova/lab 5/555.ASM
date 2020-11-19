@@ -25,10 +25,10 @@ WRITE   PROC FAR
 	mov ST_AX, AX
 	mov AX, SS
 	mov ST_SS, AX ; сохранение SS
-	mov AX, SEG INT_STACK ;;;;
+	mov AX, SEG INT_STACK 
 	mov SS, AX ;новый стек
 	mov AX, ST_AX
-	mov SP OFFSET a
+	mov SP, OFFSET a
 	PUSH AX ; сохранение изменяемых регистров
 	PUSH DX
 
