@@ -20,8 +20,10 @@ _MODULE_INTERVAL:
     SUB rax, rax            # кол-во обработанных элементов из numberArray
     SUB rbx, rbx            # счетчик обработанных границ
 
-CHECK_BORDERS:
+GET_NUMBER:
     MOV r8, [rdx]
+
+CHECK_BORDERS:
     CMP r8, [rdi+rbx]
     JLE MATCHED_BORDER
 
@@ -38,6 +40,6 @@ MATCHED_BORDER:
 
     SUB rbx, rbx
     CMP rax, rcx
-    JL CHECK_BORDERS
+    JL GET_NUMBER
 
 RET
