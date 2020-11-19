@@ -14,20 +14,21 @@ ASSUME  DS:DataSG, CS:Code, SS:STACKSG
 
 WRITE   PROC FAR
 
-	jmp aaa
+	jmp a
 	ST_SS DW 0000
 	ST_SP DW 0000
 	ST_AX DW 0000
 	INT_STACK DW 20 DUP(0)
 
-	aaa:
+	a:
 	mov ST_SP, SP ; cохранение SP
 	mov ST_AX, AX
 	mov AX, SS
 	mov ST_SS, AX ; сохранение SS
-	mov AX, INT_STACK
+	mov AX, SEG INT_STACK ;;;;
 	mov SS, AX ;новый стек
 	mov AX, ST_AX
+	mov SP OFFSET a
 	PUSH AX ; сохранение изменяемых регистров
 	PUSH DX
 
