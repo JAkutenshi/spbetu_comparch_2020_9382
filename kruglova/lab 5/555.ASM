@@ -5,7 +5,7 @@ STACKSG	ENDS
 DATASG  SEGMENT  PARA 'Data'				
 	KEEP_CS DW 0 ; для хранения сегмента
 	KEEP_IP DW 0 ; и смещения вектора прерывания
-	GREETING  DB 'Subbotin Maksim 9382 $'
+	GREETING  DB 'Kruglova Viktoria 9382        $'
 	KKK DW 0
 	crlf db 0ah, 0dh, '$'
 DATASG	ENDS								
@@ -83,9 +83,9 @@ Main    PROC  FAR
 	mov   DX, OFFSET GREETING 
 	mov KKK, 7
 
-	count_loop:
+	kkk_loop:
 		cmp KKK,0
-		jnz count_loop
+		jnz kkk_loop
 	CLI
 	PUSH DS
 	MOV  DX, KEEP_IP
