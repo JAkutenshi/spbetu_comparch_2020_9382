@@ -5,9 +5,7 @@ STACKSG	ENDS
 DATA      SEGMENT			    ;SEG DATA
 	KEEP_CS DW 0 ; для хранения сегмента
 	KEEP_IP DW 0 ; и смещения вектора прерывания
-    KEEP_CX DW 0 ; для хранения сегмента
-	KEEP_DX DW 0
-    KEEP_AX DW 0
+
 
 DATA	ENDS					;ENDS DATA
 
@@ -15,6 +13,10 @@ CODE      SEGMENT   			;SEG CODE
 ASSUME CS:CODE, DS:DATA, SS:STACKSG
 
 MAKE_DELAY  PROC FAR
+
+    KEEP_CX DW 0                ; для хранения сегмента
+    KEEP_DX DW 0
+    KEEP_AX DW 0
 
     MOV  KEEP_CX, CX
     MOV  KEEP_DX, DX
@@ -34,6 +36,7 @@ MAKE_DELAY  PROC FAR
 
 
 	IRET                        ;конец прерывания
+
 
 MAKE_DELAY ENDP                 ;конец процедуры
 
