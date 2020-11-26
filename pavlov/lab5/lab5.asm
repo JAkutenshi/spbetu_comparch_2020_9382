@@ -11,6 +11,20 @@ code segment
 	assume ds:data, cs:code, ss:stack
 	
 	interrupt proc far
+		jmp a
+		save_ax dw 1 (0)
+		save_ss dw 1 (0)
+		save_sp dw 1 (0)
+		iStack dw 6 dup(0)			; выделяем память для нового стека
+		
+		a:
+		mov save_ss, ss
+		mov save_sp, sp
+		mov save_ax, ax
+		mov ax, seg iStack			; сохраняем стек программы в памяти
+		mov ss, ax
+		mov sp, offset a
+		mov ax, save_ax
 		
 		push ax						; AX будем менять, сохраняем на стеке
 		
@@ -21,12 +35,18 @@ code segment
 		out 42h, al
 		mov al, ah
 		out 42h, al
+
+		pop ax						; восстанавливаем AX
 		
+		mov save_ax, ax
+		mov ax, save_ss
+		mov ss, ax					; восстанавливаем стек программы
+		mov sp, save_sp
+		mov ax, save_ax
 		
 		mov al, 20h					; возвращаем возможность управления другим прерываниям (с более низким приоритетом)
 		out 20h, al
-
-		pop ax						; восстанавливаем AX
+		
 		iret
 	interrupt endp
 	
