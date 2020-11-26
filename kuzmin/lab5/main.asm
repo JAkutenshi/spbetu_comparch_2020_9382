@@ -26,9 +26,10 @@ new_08h  PROC FAR
 	mov keep_sp, sp
 	mov keep_ss, ss
 	mov keep_ax, ax
-	mov ax, new_st
-	mov ss, ax
-
+	mov ss, new_st
+	mov sp, 6
+	push cx
+	
 	delay:
 	nop
 	loop delay 
@@ -36,6 +37,7 @@ new_08h  PROC FAR
     mov al,20h
     out 20h,al
 	
+	pop cx
 	mov ss, keep_ss
 	mov sp, keep_sp
 	mov ax, keep_ax
