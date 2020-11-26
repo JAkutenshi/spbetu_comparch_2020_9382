@@ -7,6 +7,10 @@ DATA SEGMENT
 
 KEEP_CS DW 0 ; для хранения сегмента
 KEEP_IP DW 0 ; и смещения вектора прерывания
+keep_sp dw 0
+keep_ss dw 0
+keep_ax dw 0
+new_st dw 10 dup (?)
 msg DB 'hello$'
 timer DW 0
 
@@ -18,9 +22,20 @@ ASSUME SS:AStack, DS:DATA, CS:Code
 
 ;обработчик 08h
 new_08h  PROC FAR
+	
+	mov keep_sp, sp
+	mov keep_ss, ss
+	mov keep_ax, ax
+	mov ax, new_st
+	mov ss, ax
+	mov ax, keep_ax
+	
 	dec timer
     mov al,20h
     out 20h,al
+	
+	mov ss, keep_ss
+	mov sp, keep_sp
     iret	
 new_08h  ENDP
 
@@ -53,7 +68,7 @@ MAIN PROC FAR
  delay:
  cmp timer,0 
  jge delay;
- mov ah, 9h
+ mov ah, 9
  int 21h
  
  ;восстанавление старого вектора прерывания
