@@ -21,7 +21,7 @@ code segment
 		mov save_ss, ss
 		mov save_sp, sp
 		mov save_ax, ax
-		mov ax, seg iStack?
+		mov ax, seg iStack
 		mov ss, ax
 		mov sp, offset a
 		mov ax, save_ax
