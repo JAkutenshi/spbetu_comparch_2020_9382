@@ -27,15 +27,35 @@ code segment
 		mov ax, save_ax
 		
 		push ax						; AX будем менять, сохраняем на стеке
+		push bx
 		
+		in al, 61h					; включаем звук
+		mov ah, al
+		mov bx, 13000
+		
+		or al, 3
+		out 61h, al
+		
+		za:
+		
+		sub bx, 1
 		mov al, 182					; настраиваем таймер
 		out 43h, al
+
 		
 		mov ax, bx					; передаём делитель частоты
 		out 42h, al
 		mov al, ah
 		out 42h, al
-
+		
+		cmp bx, 6000
+		jne za
+		xor bx, bx
+		
+		mov al, ah					; теперь надо выключить, общага спит
+		out 61h, al
+		
+		pop bx
 		pop ax						; восстанавливаем AX
 		
 		mov save_ax, ax
@@ -78,26 +98,15 @@ code segment
 		pop ds
 		sti
 	;---------------------------------	
-		in al, 61h					; включаем звук
-		mov ah, al
-		or al, 3
-		mov bx, 12000				; начальный делитель частоты
-		out 61h, al
-		
-		za:
-		mov cx, 0ffffh				; ставим задержку на очень много тактов
-		
 		looper:
-		loop looper
 		
-		sub bx, 100
-		cmp bx, 1500				; уменьшаем делитель частоты на 100 (частота звука тем временем растёт)
-		jg za
+		mov ah, 1h
+		int 21h
+		cmp al, 1bh
+		je next
+		jmp looper
 		
-		xor bx, bx
-		
-		mov al, ah					; теперь надо выключить, общага спит
-		out 61h, al
+		next:
 		
 	;---------------------------------
 	
