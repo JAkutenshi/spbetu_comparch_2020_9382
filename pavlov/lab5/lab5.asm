@@ -1,9 +1,9 @@
 stack segment stack
-	dw 6 dup(?)						; вполне достаточно
+	dw 6 dup(?)
 stack ends
 
 data segment
-	keep_seg dw 0					; здесь сохраним дефолтный вектор
+	keep_seg dw 0
 	keep_offset dw 0
 data ends
 
@@ -15,22 +15,24 @@ code segment
 		save_ax dw 1 (0)
 		save_ss dw 1 (0)
 		save_sp dw 1 (0)
-		iStack dw 6 dup(0)			; выделяем память для нового стека
+		iStack dw 6 dup(0)
 		
 		a:
 		mov save_ss, ss
 		mov save_sp, sp
 		mov save_ax, ax
-		mov ax, seg iStack			; сохраняем стек программы в памяти
+		mov ax, seg iStack?
 		mov ss, ax
 		mov sp, offset a
 		mov ax, save_ax
 		
-		push ax						; AX будем менять, сохраняем на стеке
+		push ax
 		push bx
+		push dx
 		
-		in al, 61h					; включаем звук
+		in al, 61h
 		mov ah, al
+		mov dx, ax
 		mov bx, 13000
 		
 		or al, 3
@@ -39,11 +41,11 @@ code segment
 		za:
 		
 		sub bx, 1
-		mov al, 182					; настраиваем таймер
+		mov al, 182
 		out 43h, al
 
 		
-		mov ax, bx					; передаём делитель частоты
+		mov ax, bx
 		out 42h, al
 		mov al, ah
 		out 42h, al
@@ -52,19 +54,20 @@ code segment
 		jne za
 		xor bx, bx
 		
-		mov al, ah					; теперь надо выключить, общага спит
+		mov ax, dx
 		out 61h, al
 		
+		pop dx
 		pop bx
-		pop ax						; восстанавливаем AX
+		pop ax
 		
 		mov save_ax, ax
 		mov ax, save_ss
-		mov ss, ax					; восстанавливаем стек программы
+		mov ss, ax
 		mov sp, save_sp
 		mov ax, save_ax
 		
-		mov al, 20h					; возвращаем возможность управления другим прерываниям (с более низким приоритетом)
+		mov al, 20h
 		out 20h, al
 		
 		iret
@@ -73,14 +76,14 @@ code segment
 	
 	main proc far
 		push ds
-		sub ax, ax					; инициализируем сегмент данных
+		sub ax, ax
 		push ax
 		
 		mov ax, data
 		mov ds, ax
 		
 		
-		mov ax, 351ch				; получаем вектор прерывания, сохраняем в памяти
+		mov ax, 351ch
 		int 21h
 		
 		mov keep_offset, bx
@@ -88,7 +91,7 @@ code segment
 	;---------------------------------
 		cli
 		push ds
-		mov dx, offset interrupt	; устанавливаем новый обработчик прерывания
+		mov dx, offset interrupt
 		mov ax, seg interrupt
 		mov ds, ax
 		
@@ -107,13 +110,12 @@ code segment
 		jmp looper
 		
 		next:
-		
 	;---------------------------------
 	
 		cli
 		push ds
 		
-		mov dx, keep_offset			; восстанавливаем исходный вектор прерывания
+		mov dx, keep_offset
 		mov ax, keep_seg
 		mov ds, ax
 		
@@ -130,4 +132,3 @@ code segment
 	main endp
 code ends
 end main
-	
