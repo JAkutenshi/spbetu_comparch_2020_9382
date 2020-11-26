@@ -5,6 +5,9 @@ STACKSG	ENDS
 DATA      SEGMENT			    ;SEG DATA
 	KEEP_CS DW 0 ; для хранения сегмента
 	KEEP_IP DW 0 ; и смещения вектора прерывания
+    KEEP_CX DW 0 ; для хранения сегмента
+	KEEP_DX DW 0
+    KEEP_AX DW 0
 
 DATA	ENDS					;ENDS DATA
 
@@ -13,22 +16,25 @@ ASSUME CS:CODE, DS:DATA, SS:STACKSG
 
 MAKE_DELAY  PROC FAR
 
-	PUSH AX                    ;сохраняем все изменяемые регистры
-	PUSH DX                    ;сохраняем все изменяемые регистры
-    PUSH CX                    ;сохраняем все изменяемые регистры
+    MOV  KEEP_CX, CX
+    MOV  KEEP_DX, DX
+    MOV  KEEP_AX, AX
 
-    MOV     CX, 0FH
-    MOV     DX, 5240H
+    MOV     CX, 0FH            ; время ожидания в секундах старш
+    MOV     DX, 5240H          ; время ожидания в секундах младш
     MOV     AH, 86H
     INT     15H
 
-    POP CX                      ;восстанавливаем регистры
-	POP DX                      ;восстанавливаем регистры
-	POP AX                      ;восстанавливаем регистры
-	MOV AL, 20H
+	MOV AL, 20H                ; для обработки прерыв с более низкими уровнями
 	OUT 20H, AL
 
+    mov CX, KEEP_CX
+    MOV DX, KEEP_DX
+    MOV AX, KEEP_AX
+
+
 	IRET                        ;конец прерывания
+
 MAKE_DELAY ENDP                 ;конец процедуры
 
 Main  PROC  FAR
@@ -41,7 +47,7 @@ Main  PROC  FAR
 
 
 	PUSH DS
-	MOV DX, OFFSET MAKE_DELAY
+	MOV DX, OFFSET MAKE_DELAY  ;
 	MOV  AX, SEG MAKE_DELAY    ; сегмент процедуры
 	MOV  DS, AX                ; помещаем в DS
 	MOV  AH, 25H               ; функция установки вектора
