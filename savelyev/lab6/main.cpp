@@ -3,25 +3,18 @@
 #include <ctime>
 #include <random>
 
-extern "C" void INTERVAL_SORTING(int64_t* LGrInt, int64_t* result, int64_t* array, int64_t NInt);
-
-int64_t getRandomNumber(int64_t min, int64_t max) {
-    std::random_device rd;
-    std::mt19937 mt(rd());
-    std::uniform_int_distribution<int> dist(min, max);
-    return dist(mt);
-}
+extern "C" void INTERVAL_SORTING(int64_t* LGrInt, int64_t* borderult, int64_t* array, int64_t NInt);
 
 int main() {
     int64_t NInt = 0;
     int64_t Xmin = 0;
     int64_t Xmax = 0;
     int64_t count = 0;
-    int64_t res;
+    int64_t border;
 
     std::cout << "Введите длину массива: ";
     std::cin >> NInt;
-
+    // Проверка длины массива
     while (NInt > 16384) {
         std::cout << "Длинна больше допустимой, введите заново: ";
         std::cin >> NInt;
@@ -32,7 +25,7 @@ int main() {
 
     std::cout << "Введите верхний интервал: ";
     std::cin >> Xmax;
-
+    // Проверка верхнего интервала
     while (Xmax <= Xmin) {
         std::cout << "Введен не коректный верхний интервал, введите еще раз: " << '\n';
         std::cin >> Xmax;
@@ -40,7 +33,7 @@ int main() {
 
     std::cout << "Введите количество интервалов: ";
     std::cin >> count;
-
+    // Проверка интервалов
     while (count > 24) {
         std::cout << "Введено не коректное число, введите еще раз: ";
         std::cin >> count;
@@ -48,7 +41,7 @@ int main() {
 
     int64_t *LGrInt = new int64_t[count];
     std::cout << "Введите " << count - 1 << " нижниx границ интервалов: ";
-
+    // Считывание нижних границ
     for (int64_t i = 0; i < count - 1; i++) {
         std::cin >> LGrInt[i];
         while (LGrInt[i] > Xmax || LGrInt[i] < Xmin) {
@@ -60,19 +53,19 @@ int main() {
     LGrInt[count - 1] = Xmax;
 
     int64_t *array = new int64_t[NInt];
-
+    // Генерация псевдослучайных чисел
     for (int64_t i = 0; i < NInt; i++) {
-        array[i] = getRandomNumber(Xmin, Xmax);
+        array[i] = Xmin + rand() % (Xmax - Xmin);
     }
-
-    int64_t *result = new int64_t[count];
+    // Обнуляем массив ответ
+    int64_t *borderult = new int64_t[count];
     for (int64_t i = 0; i < count; i++) {
-        result[i] = 0;
+        borderult[i] = 0;
     }
-
-    INTERVAL_SORTING(LGrInt, result, array, NInt);
-
-    std::ofstream out_file("result.txt");
+    // Вызов ассемблерного модуля
+    INTERVAL_SORTING(LGrInt, borderult, array, NInt);
+    // Запись в файл и вывод на экран
+    std::ofstream out_file("borderult.txt");
     std::cout << "Набор случайных чисел: ";
     out_file << "Набор случайных чисел: ";
     for (int64_t i = 0; i < NInt; i++) {
@@ -86,16 +79,16 @@ int main() {
 
     for (int64_t i = 0; i < count; i++) {
         if(i != 0) {
-            res = LGrInt[i - 1];
+            border = LGrInt[i - 1];
         }
-        else{
-            res = Xmin;
+        else {
+            border = Xmin;
         }
-            out_file << "       " << i+1 << "\t\t     " << res << "\t\t\t     " << result[i] << "\n";
-            std::cout << "       " << i+1 << "\t     " << res << "\t\t     " << result[i] << "\n";
+            out_file << "       " << i+1 << "\t\t     " << border << "\t\t\t     " << borderult[i] << "\n";
+            std::cout << "       " << i+1 << "\t     " << border << "\t\t     " << borderult[i] << "\n";
     }
-
-    delete result;
+    // Освобождение памяти
+    delete borderult;
     delete array;
     delete LGrInt;
 
