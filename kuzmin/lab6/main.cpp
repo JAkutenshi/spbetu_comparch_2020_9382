@@ -1,7 +1,10 @@
+
+#include "pch.h"
 #include <iostream>
 
 int main()
 {
+	
 	int n;
 	int xmin;
 	int xmax;
@@ -11,7 +14,7 @@ int main()
 
 	std::cout << "Введите размер массива: ";
 	std::cin >> n;
-	while (n < 0) {
+	while (n <= 0) {
 		std::cout << "Повторите ввод:";
 		std::cin >> n;
 	}
@@ -93,7 +96,7 @@ int main()
 
 		
 		mov esi, lgrint
-		mov esi, [esi + edi];
+		mov esi, [esi + edi*4];
 		sub esi, xmin
 
 		mov ebx, lgrint
@@ -104,7 +107,7 @@ int main()
 	
 			
 	
-		oneinterval:
+		countinterval:
 		cmp esi, ebx
 		je nextinterval
 		
@@ -114,12 +117,12 @@ int main()
 
 		inc esi
 
-		jmp oneinterval
+		jmp countinterval
 
 		nextinterval:
 		cmp edi, ecx
 		je lastint
-		jg stu
+		jg endprog
 		inc edi
 		mov esi, lgrint
 		mov esi, [esi + edi*4]
@@ -130,7 +133,7 @@ int main()
 		sub edi,  1
 		sub ebx, xmin
 
-		jmp oneinterval
+		jmp countinterval
 
 		lastint:
 		cmp ecx, 1
@@ -142,19 +145,20 @@ int main()
 		sub esi, xmin
 		add esi, 1
 		cmp ebx, esi
-		je stu
+		je endprog
 		mov ebx, xmax
 		sub ebx, xmin
 		add ebx, 1
 		mov esi, lgrint
 		mov esi, [esi + edi*4]
 		sub esi, xmin
-		jmp oneinterval
+		jmp countinterval
 
-		stu:
+		endprog:
 	}
 	std::cout << "Распределение по заданным интервалам:\n";
 	for (int i = 0; i < arr_length; i++)
 		if (i != arr_length - 1)std::cout << "[" << lgrint[i] << "," <<lgrint[i + 1] - 1 << "]: " << frequency[i] << "\n";
 		else std::cout << "[" << lgrint[i] << "," << xmax << "]: " << frequency[i] << "\n";
 }
+
