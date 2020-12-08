@@ -25,7 +25,6 @@ double Asin(double* xP)
             fxch st(1);
             fpatan;
             fstp y;
-            END:
     }
     return y;
 }
