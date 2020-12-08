@@ -1,75 +1,94 @@
-ASTACK SEGMENT STACK
-	DB 1024 DUP(0)
-ASTACK ENDS
-
+AStack    SEGMENT  STACK
+          DW 1024 DUP(?)
+AStack    ENDS
 DATA SEGMENT
-	SYSTEM_CS DW 0
-	SYSTEM_IP DW 0
-	MESSAGE DB 'Press Esc to exit', 10, 13,'$'
-    COUNT DB 0	
+SYSTEM_CS DW 0
+SYSTEM_IP DW 0
+message db 'Press esc to exit!',10,13,'$'
+
 DATA ENDS
+CODE      SEGMENT
+          ASSUME CS:CODE, DS:DATA, SS:AStack
 
-CODE SEGMENT
-	ASSUME CS:CODE, DS:DATA, SS:ASTACK
+          MY_INT PROC FAR jmp ss ax ss<-code offset
+          jmp start
 
-MAIN PROC FAR
-	; Инициализация
-	PUSH DS
-	SUB AX, AX
-	PUSH AX 
-	MOV AX, DATA
-	MOV DS, AX
-	; Сохранение системного обработчика прерывания
-	MOV AX, 3508H ; Dos fn 35h get interrupt,  interrupt 08
-	INT 21H ; ES:BX = system interrupt handler adress
-	MOV SYSTEM_IP, BX
-	MOV SYSTEM_CS, ES
-	; Установка прерывания
-	PUSH DS ; Сохранение DS
-	MOV DX, OFFSET MY_INT ; Установка Оффсета прерывания
-	MOV AX, SEG MY_INT
-	MOV DS, AX ; Установка сегмента прерывания
-	MOV AX, 2508H ; Dos fn 25h set interrupt, interrupt 08, DS:DX - my inturrept
-	INT 21H
-	POP DS ; Восстановление DS
-	; Бесконечный цикл
-STOPPER: ; Считывание символа с клавиатуры
-	SUB AH, AH ; AH = 0
-	INT 16H ; AX = полученный символ
-	CMP AH, 01H
-		JNE STOPPER ; Бесконечный цикл, пока не нажали ESC
-	; Восстановление старого прерывания
-	CLI ; Clear interrupt flag (disable interrupts)
-	PUSH DS ; Сохранение DS
-	MOV DX, SYSTEM_IP ; Установка Оффсета прерывания
-	MOV AX, SYSTEM_CS
-	MOV DS, AX ; Установка сегмента прерывания
-	MOV AX, 2508H ; Dos fn 25h set interrupt, interrupt 08, DS:DX - my inturrept
-	INT 21H
-	POP DS ; Восстановление DS
-	STI ; Set interrupt flag (enable interrupts)
- 	RET
-MAIN ENDP
+ST_SS DW 0000
+ST_AX DW 0000
+ST_SP DW 0000
+IStack DW 30 DUP(?)
 
-MY_INT PROC FAR ; обработчик прерываний
-	cmp COUNT,16 ;  каждую секунду выводить 4 сообщения
-		jne sec
-	PUSH DX ; сохранение регистров
-	PUSH AX
-	MOV DX, OFFSET MESSAGE ; вывод сообщения
-	MOV AH, 9H ; Dos fn 09h print string, DS:DX - my string
-	INT 21H
-	mov COUNT, 0 ; COUNT = 1
-	POP DX ; восстановление регистров
-	POP AX
+   start:
 
-sec:
-	inc COUNT ; COUNT += 1
-	MOV AL, 20H ; Low-level interruptions
-	OUT 20H, AL ; Low-level interruptions
-	IRET
+   mov ST_SP, SP
+   mov ST_AX, AX
+   mov AX, SS
+   mov ST_SS, AX
+   mov AX, IStack
+   mov SS, AX
+   mov AX, ST_AX
+
+   push ax
+    push dx
+    mov  ah, 09h
+    mov dx, offset message
+    int  21h
+    pop dx
+    pop ax
+
+    mov ST_AX,AX
+	mov AX,ST_SS
+	mov SS,AX
+	mov SP,ST_SP
+	mov AX,ST_AX
+
+    mov al,20h
+    out 20h,al
+     iret
 MY_INT ENDP
 
-CODE ENDS
+Main PROC FAR
+push ds
+sub ax,ax
+push ax
+mov ax,data
+mov ds, ax
 
-END MAIN
+mov ax,3523h
+ INT 21H
+ MOV SYSTEM_IP, BX 
+ MOV SYSTEM_CS, ES 
+
+ PUSH DS
+ MOV DX, OFFSET MY_INT
+ MOV AX, SEG MY_INT 
+ MOV DS, AX
+ mov ax,2508h  
+ INT 21H 
+ POP DS
+
+ STOPPER:
+ mov   ah,1h
+       int   21h 
+       cmp   al,27 
+       jne nextstep
+
+       	CLI
+ PUSH DS
+ MOV DX, SYSTEM_IP
+ MOV AX, SYSTEM_CS
+ MOV DS, AX
+ mov AX,2508h 
+ INT 21H
+ POP DS
+ STI
+ ret
+
+       nextstep:
+       jmp STOPPER
+
+ 
+
+Main ENDP
+CODE ENDS
+ END Main 
