@@ -12,6 +12,14 @@ int main() {
     int64_t count = 0;
     int64_t border;
 
+int64_t RandD(int64_t Xmin, int64_t Ymax)
+{
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_int_distribution<int> dist(Xmin, Ymax);
+    return dist(mt);
+}
+
     std::cout << "Введите длину массива: ";
     std::cin >> NInt;
     // Проверка длины массива
@@ -55,7 +63,7 @@ int main() {
     int64_t *array = new int64_t[NInt];
     // Генерация псевдослучайных чисел
     for (int64_t i = 0; i < NInt; i++) {
-        array[i] = Xmin + rand() % (Xmax - Xmin);
+        array[i] = RandD(Xmin,Ymin);
     }
     // Обнуляем массив ответ
     int64_t *borderult = new int64_t[count];

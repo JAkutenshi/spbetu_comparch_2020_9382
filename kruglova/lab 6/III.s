@@ -13,7 +13,7 @@ INTERVAL_SORTING:  # rdi : LGrInt,   rsi : result ,   rdx : array,    rcx : NInt
     	mov rbx, rdx			    # в rbx лежит текущий индекс из LGrInt
     	shl rbx, 3				    # этот индекс умножаем на 8, т.е. каждый элемент по 8 байт
     	cmp rax, [rdi + rbx]	# сравниваем текущий элемент массива с текущей границей
-        jg search_case			# если элемент массива больше границы
+        jge search_case			# если элемент массива больше границы
         jmp write_case
 
     search_case:
