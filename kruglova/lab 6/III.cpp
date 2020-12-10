@@ -5,13 +5,6 @@
 
 extern "C" void INTERVAL_SORTING(int64_t* LGrInt, int64_t* borderult, int64_t* array, int64_t NInt);
 
-int main() {
-    int64_t NInt = 0;
-    int64_t Xmin = 0;
-    int64_t Xmax = 0;
-    int64_t count = 0;
-    int64_t border;
-
 int64_t RandD(int64_t Xmin, int64_t Xmax)
 {
     std::random_device rd;
@@ -19,6 +12,13 @@ int64_t RandD(int64_t Xmin, int64_t Xmax)
     std::uniform_int_distribution<int> dist(Xmin, Xmax);
     return dist(mt);
 }
+
+int main() {
+    int64_t NInt = 0;
+    int64_t Xmin = 0;
+    int64_t Xmax = 0;
+    int64_t count = 0;
+    int64_t border;
 
     std::cout << "Введите длину массива: ";
     std::cin >> NInt;
