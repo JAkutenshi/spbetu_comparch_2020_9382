@@ -25,7 +25,6 @@ f:
 	shl ax, 1
 	cmp si, bx
 	jg f1_1
-	jmp f1
 	
 f1:
 	mov bx, I
@@ -49,7 +48,6 @@ f_2:
 	mov bx, B
 	mov ax, I
 	shl ax, 1
-	cmp si, bx
 	jg f2
 	jmp f2_2
 	
