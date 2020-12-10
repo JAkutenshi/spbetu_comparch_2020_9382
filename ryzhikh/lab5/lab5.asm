@@ -11,9 +11,13 @@ CODE    SEGMENT
     ASSUME SS:AStack, DS:DATA, CS:CODE
  
 SUBR_INT PROC FAR 
-	PUSH AX ; сохранение изменяемых регистров
-	PUSH DX
- 
+	keep_ax DW 0
+	keep_dx DW 0
+	keep_cx DW 0;
+	mov keep_ax, AX
+	mov keep_dx, DX
+	mov keep_cx, CX
+
 	MOV AL, 10110110b
 	OUT 43H, AL
 	MOV AX, 880 ; sound pitch
@@ -30,11 +34,11 @@ SOUND:
 	MOV AL, AH
 	OUT 61H, AL 
  
-	POP AX ; восстановление регистров
-	POP DX  
- 
+ 	mov DX, keep_dx
 	MOV AL, 20H ; разрешают обработку прерываний с более низким уровнем
 	OUT 20H,AL 
+	mov CX, keep_cx
+	mov AX, keep_ax
 	IRET 
 SUBR_INT ENDP 
  
