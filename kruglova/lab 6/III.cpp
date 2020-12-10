@@ -58,7 +58,7 @@ int main() {
         }
     }
 
-    LGrInt[count - 1] = Xmax;
+    LGrInt[count - 1] = Xmax+1;
 
     int64_t *array = new int64_t[NInt];
     // Генерация псевдослучайных чисел
