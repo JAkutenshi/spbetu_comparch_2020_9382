@@ -12,11 +12,21 @@ ASM_FUN proc C LGrIn:dword, array:dword, res:dword, NInt:dword,NumRanDat:dword
 for_first:
     ;от 0 до NInt-1
     mov edx,array
+    sub ecx,ecx
     for_second:
         ;от 0 до NumRanDat
         
-        ;проверка условия if array[j] > LGrIn[i]
+        ;проверка условия if LGrIn[i] == LGrIn[i+1]
+        mov ebx,LGrIn
+        mov ebx,[ebx+eax*4]
+        mov edx,LGrIn
+        mov edx,[edx+eax*4+1]
+        cmp ebx,edx
+        mov edx,array
+        je equal
+        
 
+        ;проверка условия if array[j] >= LGrIn[i]
         mov ebx,LGrIn
         mov ebx,[ebx+eax*4]
         cmp ebx,[edx+ecx*4]
@@ -27,7 +37,14 @@ for_first:
             mov ebx,LGrIn
             mov ebx,[ebx+eax*4+4]
             cmp ebx,[edx+ecx*4]
-            jae second_if
+            jg second_if
+            jmp break_if
+
+        equal:; проверка условия array[j]==LGrIn[i]
+            mov ebx,LGrIn
+            mov ebx,[ebx+eax*4]
+            cmp ebx,[edx+ecx*4]
+            je second_if
             jmp break_if
 
         second_if:   ;  res[i]++;
@@ -43,9 +60,9 @@ for_first:
     jl for_second
 
 mov ecx,NInt
-sub ecx,1
+;sub ecx,1
 inc eax
-cmp eax,ecx    ; i < NInt - 1
+cmp eax,ecx    ; i < NInt
 jl for_first
 
 pop edx

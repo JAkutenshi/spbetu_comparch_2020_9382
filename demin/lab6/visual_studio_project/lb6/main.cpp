@@ -46,10 +46,10 @@ int main()
 		cout << "Enter number of intervals\n";
 		cin >> NInt;
 	}
-	LGrInt = new int[NInt];
+	LGrInt = new int[NInt+1];
 	res = new int[NInt];
-	cout << "Enter " << NInt - 2 << "lintervals(!=Xmin&&!=Xmax)\n";
-	for (int i = 1; i < NInt - 1; i++)
+	cout << "Enter " << NInt  << "lintervals\n";
+	for (int i = 0; i < NInt ; i++)
 	{
 		cin >> LGrInt[i];
 		while (1) {
@@ -60,8 +60,8 @@ int main()
 			cin >> LGrInt[i];
 		}
 	}
-	LGrInt[0] = Xmin;
-	LGrInt[NInt - 1] = Xmax;
+	LGrInt[NInt] = Xmax +1;
+	
 
 	//дискретная равномерное распределение
 	std::random_device                  rand_dev;
@@ -75,9 +75,10 @@ int main()
 	{
 		res[i] = 0;
 	}
+	
 
 	//вызов ассемблерной функции
-	ASM_FUN(LGrInt, arr, res,  NInt,NumRanDat);
+	ASM_FUN(LGrInt, arr, res, NInt, NumRanDat);
 
 	std::ofstream file;
 	file.open("out.txt");
@@ -92,7 +93,7 @@ int main()
 	for (int i = 0; i < NInt; i++)
 	{
 		if (i == NInt-1) {
-			cout << "№" << i << " [" << LGrInt[i] << " ," << LGrInt[i] << "]: " << res[i] << "\n";
+			cout << "№" << i << " [" << LGrInt[i] << " ," << Xmax << "]: " << res[i] << "\n";
 			continue;
 		}else if (LGrInt[i]!= LGrInt[i + 1]) {
 			cout << "№" << i << " [" << LGrInt[i] << " ," << LGrInt[i + 1] - 1 << "]: " << res[i] << "\n";
