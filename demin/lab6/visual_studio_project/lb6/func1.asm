@@ -20,14 +20,14 @@ for_first:
         mov ebx,LGrIn
         mov ebx,[ebx+eax*4]
         cmp ebx,[edx+ecx*4]
-        jl first_if
+        jle first_if
         jmp break_if
 
         first_if:     ;проверка условия array[j] < LGrIn[i + 1]
             mov ebx,LGrIn
             mov ebx,[ebx+eax*4+4]
             cmp ebx,[edx+ecx*4]
-            ja second_if
+            jae second_if
             jmp break_if
 
         second_if:   ;  res[i]++;
@@ -41,23 +41,17 @@ for_first:
     inc ecx
     cmp ecx,NumRanDat    ;j < NumRanDat
     jl for_second
+
 mov ecx,NInt
 sub ecx,1
 inc eax
 cmp eax,ecx    ; i < NInt - 1
 jl for_first
 
-		;for (int i = 0; i < NInt - 1; ++i) {+
-        ;  for (int j = 0; j < NumRanDat; ++j) {    +
-        ;       if (array[j] > LGrIn[i] && array[j] < LGrIn[i + 1]) {
-        ;           res[i]++;
-        ;      }
-        ;   }
-        ;}
-        pop edx
-        pop ebx
-        pop ecx
-        pop eax
+pop edx
+pop ebx
+pop ecx
+pop eax
 
 ret
 ASM_FUN endp

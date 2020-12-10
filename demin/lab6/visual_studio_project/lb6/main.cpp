@@ -1,5 +1,3 @@
-//
-
 #include <iostream>
 #include <random>
 #include <fstream>
@@ -91,11 +89,19 @@ int main()
 
 	cout << "\n";
 
-	for (int i = 0; i < NInt-1; i++)
+	for (int i = 0; i < NInt; i++)
 	{
-		cout<<"¹" << i << " (" << LGrInt[i] << " ," << LGrInt[i+1]<<"): " << res[i] << "\n";
+		if (i == NInt-1) {
+			cout << "¹" << i << " [" << LGrInt[i] << " ," << LGrInt[i] << "]: " << res[i] << "\n";
+			continue;
+		}else if (LGrInt[i]!= LGrInt[i + 1]) {
+			cout << "¹" << i << " [" << LGrInt[i] << " ," << LGrInt[i + 1] - 1 << "]: " << res[i] << "\n";
+		}
+		else {
+			cout << "¹" << i << " [" << LGrInt[i] << " ," << LGrInt[i + 1] << "]: " << res[i] << "\n";
+		}
 	}
-	for (int i = 0; i < NInt-1; i++)
+	for (int i = 0; i < NInt; i++)
 	{
 		file << i << "  " << LGrInt[i] << "  " << res[i]<<"\n";
 	}
