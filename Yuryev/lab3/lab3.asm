@@ -34,22 +34,20 @@ f1:
 	sub ax, bx	; ax = 2I - 8I = -6I
 	add ax, 4
 	mov I1, ax
-	jmp f_2
+	sub ax, ax
+	mov ax, I
+	shl ax, 1
+	jmp f2
 	
 f1_1:
 	mov bx, I
 	add ax, bx	; ax = 2I + I = 3I
 	add ax, 6
 	mov I1, ax
-	jmp f_2
-	
-f_2:
-	mov si, A 
-	mov bx, B
+	sub ax, ax
 	mov ax, I
 	shl ax, 1
-	jg f2
-	jmp f2_2
+	jmp f2_2 
 	
 f2:
 	shl ax, 1
