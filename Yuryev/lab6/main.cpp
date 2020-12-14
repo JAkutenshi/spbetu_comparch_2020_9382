@@ -100,20 +100,15 @@ int main()
 
 	cout << "Result:\n";
 	result << "Result:\n";
-	cout << "№\tBorder\tCount of numbers" << endl;
-	result << "№\tBorder\tCount of numbers" << endl;
+	cout << "Nom\tBorder\tCount of numbers" << endl;
+	result << "Nom\tBorder\tCount of numbers" << endl;
 
 	for (int i = 0; i < intervals_size + 1; i++)
 	{
 		if (i != intervals_size)
 		{
-			cout << i + 1 << "\t" << intervals2[i] << '\t' << mod2_result[i] << endl;
-			result << i + 1 << "\t" << intervals2[i] << '\t' << mod2_result[i] << endl;
-		}
-		else
-		{
-			cout << i + 1 << "\t" << xmax << '\t' << mod2_result[i] << endl;
-			result << i + 1 << "\t" << xmax << '\t' << mod2_result[i] << endl;
+			cout << i + 1 << "\t" << intervals2[i] << '\t' << mod2_result[i+1] << endl;
+			result << i + 1 << "\t" << intervals2[i] << '\t' << mod2_result[i+1] << endl;
 		}
 	}
 
