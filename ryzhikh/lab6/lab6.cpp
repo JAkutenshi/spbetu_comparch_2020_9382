@@ -48,7 +48,7 @@ int main() {
 	LGrInt[NInt - 1] = Xmax;
 	int* arr = new int[capacity]();
 	for (int i = 0; i < capacity; i++) {
-		arr[i] = Xmin + rand() % (Xmax - Xmin);
+		arr[i] = rand() % (Xmax - Xmin + 1) + Xmin;
 	}
 	int* range = new int[NInt];
 	for (int i = 0; i < NInt; i++)
