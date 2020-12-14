@@ -45,7 +45,7 @@ int main() {
 			exit(1);
 		}
 	}
-	LGrInt[NInt - 1] = Xmax;
+	LGrInt[NInt - 1] = Xmax + 1;
 	int* arr = new int[capacity]();
 	for (int i = 0; i < capacity; i++) {
 		arr[i] = rand() % (Xmax - Xmin + 1) + Xmin;
@@ -54,6 +54,7 @@ int main() {
 	for (int i = 0; i < NInt; i++)
 		range[i] = 0;
 	distribution(capacity, arr, LGrInt, range);
+	LGrInt[NInt - 1] -= 1;
 	ofstream file("result.txt");
 	if (!file.is_open())
 		cout << "Невозможно открыть файл!\n";

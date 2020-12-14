@@ -20,7 +20,7 @@ f2:
 	mov eax, ebx;  eax содержит текущий индекс массива границ
 	shl eax, 2 ; индекс умножаем на 4, так как каждый элемент по 4 байт
 	cmp edx, [esi+eax] ;  сравниваем текующий элемент с текущей левой границей
-	jle fe
+	jl fe
 	inc ebx
 	jmp f2
 
@@ -34,8 +34,8 @@ fe:
 	inc ecx ;  инкрементируем индекс массива
 	cmp ecx, capacity
 	jl f1
-
+	
 ret
 distribution ENDP
 
-END 
+END
