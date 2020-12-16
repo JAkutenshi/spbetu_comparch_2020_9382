@@ -1,0 +1,6 @@
+Generated pseudo-random numbers:
+0 0 -1 -1 0 -1 -1 -1 -1 -1 
+
+n_of_interval	left_brs	cnt_of_p-rm_n
+     1		    -1		   7
+     2		    0		   3
