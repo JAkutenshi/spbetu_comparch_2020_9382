@@ -1,0 +1,164 @@
+Microsoft (R) Macro Assembler Version 5.10                  12/9/20 04:58:06
+                                                             Page     1-1
+
+
+ 0000				AStack    SEGMENT  STACK
+ 0000  0400[			          DW 1024 DUP(?)
+	   ????			
+			 ]	
+				
+ 0800				AStack    ENDS
+ 0000				DATA SEGMENT
+ 0000  0000			KEEP_CS DW 0
+ 0002  0000			KEEP_IP DW 0
+ 0004  41 20 43 61 6E 20	message db 'A Can of beer!',10,13,'$' ;стро
+				ка для сообщения
+       6F 66 20 62 65 65	
+       72 21 0A 0D 24		
+				
+ 0015				DATA ENDS
+ 0000				CODE      SEGMENT
+				          ASSUME CS:CODE, DS:DATA, SS:AStack
+				
+ 0000				          Output PROC FAR
+ 0000  EB 43 90			          jmp start
+				
+ 0003  0000			ST_SS DW 0000
+ 0005  0000			ST_AX DW 0000
+ 0007  0000			ST_SP DW 0000
+ 0009  001E[			IStack DW 30 DUP(?)
+	   ????			
+			 ]	
+				
+				
+ 0045				   start:
+				
+ 0045  2E: 89 26 0007 R		   mov ST_SP, SP
+ 004A  2E: A3 0005 R		   mov ST_AX, AX
+ 004E  8C D0			   mov AX, SS
+ 0050  2E: A3 0003 R		   mov ST_SS, AX
+ 0054  2E: A1 0009 R		   mov AX, IStack
+ 0058  8E D0			   mov SS, AX
+ 005A  2E: A1 0005 R		   mov AX, ST_AX
+				
+ 005E  50			   push ax
+ 005F  52			    push dx
+ 0060  B4 09			    mov  ah, 09h
+ 0062  BA 0004 R		    mov dx, offset message
+ 0065  CD 21			    int  21h
+ 0067  5A			    pop dx
+ 0068  58			    pop ax
+				
+ 0069  2E: A3 0005 R		    mov ST_AX,AX
+ 006D  2E: A1 0003 R			mov AX,ST_SS
+ 0071  8E D0				mov SS,AX
+ 0073  2E: 8B 26 0007 R			mov SP,ST_SP
+ 0078  2E: A1 0005 R			mov AX,ST_AX
+				
+ 007C  B0 20			    mov al,20h
+Microsoft (R) Macro Assembler Version 5.10                  12/9/20 04:58:06
+                                                             Page     1-2
+
+
+ 007E  E6 20			    out 20h,al
+ 0080  CF			     iret
+ 0081				Output ENDP
+				
+ 0081				Main PROC FAR
+ 0081  1E			push ds
+ 0082  2B C0			sub ax,ax
+ 0084  50			push ax
+ 0085  B8 ---- R		mov ax,data
+ 0088  8E D8			mov ds, ax
+				
+ 008A  B8 3523			mov ax,3523h
+ 008D  CD 21			 INT 21H
+ 008F  89 1E 0002 R		 MOV KEEP_IP, BX ; запоминание см�
+				�щения
+ 0093  8C 06 0000 R		 MOV KEEP_CS, ES ; и сегмента вект
+				ора прерывания
+				
+ 0097  1E			 PUSH DS
+ 0098  BA 0000 R		 MOV DX, OFFSET Output ; смещение дл�
+				� процедуры в DX
+ 009B  B8 ---- R		 MOV AX, SEG Output ; сегмент проце
+				дуры
+ 009E  8E D8			 MOV DS, AX ; помещаем в DS
+ 00A0  B8 2508			 mov ax,2508h  
+ 00A3  CD 21			 INT 21H ; меняем прерывание
+ 00A5  1F			 POP DS
+				
+ 00A6				 waiting:
+ 00A6  B4 01			 mov   ah,1h
+ 00A8  CD 21			       int   21h 
+ 00AA  3C 1B			       cmp   al,27 
+ 00AC  75 13			       jne nextstep
+				
+ 00AE  FA			       	CLI
+ 00AF  1E			 PUSH DS
+ 00B0  8B 16 0002 R		 MOV DX, KEEP_IP
+ 00B4  A1 0000 R		 MOV AX, KEEP_CS
+ 00B7  8E D8			 MOV DS, AX
+ 00B9  B8 2508			 mov AX,2508h 
+ 00BC  CD 21			 INT 21H ; восстанавливаем ст�
+				�рый вектор прерывания
+ 00BE  1F			 POP DS
+ 00BF  FB			 STI
+ 00C0  CB			 ret
+				
+ 00C1				       nextstep:
+ 00C1  EB E3			       jmp waiting
+				
+				 
+				
+ 00C3				Main ENDP
+ 00C3				CODE ENDS
+				 END Main 
+Microsoft (R) Macro Assembler Version 5.10                  12/9/20 04:58:06
+                                                             Symbols-1
+
+
+Segments and Groups:
+
+                N a m e         	Length	 Align	Combine Class
+
+ASTACK . . . . . . . . . . . . .  	0800	PARA	STACK	
+CODE . . . . . . . . . . . . . .  	00C3	PARA	NONE	
+DATA . . . . . . . . . . . . . .  	0015	PARA	NONE	
+
+Symbols:            
+
+                N a m e         	Type	 Value	 Attr
+
+ISTACK . . . . . . . . . . . . .  	L WORD	0009	CODE	Length = 001E
+
+KEEP_CS  . . . . . . . . . . . .  	L WORD	0000	DATA
+KEEP_IP  . . . . . . . . . . . .  	L WORD	0002	DATA
+
+MAIN . . . . . . . . . . . . . .  	F PROC	0081	CODE	Length = 0042
+MESSAGE  . . . . . . . . . . . .  	L BYTE	0004	DATA
+
+NEXTSTEP . . . . . . . . . . . .  	L NEAR	00C1	CODE
+
+OUTPUT . . . . . . . . . . . . .  	F PROC	0000	CODE	Length = 0081
+
+START  . . . . . . . . . . . . .  	L NEAR	0045	CODE
+ST_AX  . . . . . . . . . . . . .  	L WORD	0005	CODE
+ST_SP  . . . . . . . . . . . . .  	L WORD	0007	CODE
+ST_SS  . . . . . . . . . . . . .  	L WORD	0003	CODE
+
+WAITING  . . . . . . . . . . . .  	L NEAR	00A6	CODE
+
+@CPU . . . . . . . . . . . . . .  	TEXT  0101h		
+@FILENAME  . . . . . . . . . . .  	TEXT  MAIN		
+@VERSION . . . . . . . . . . . .  	TEXT  510		
+
+
+     94 Source  Lines
+     94 Total   Lines
+     20 Symbols
+
+  48000 + 459260 Bytes symbol space free
+
+      0 Warning Errors
+      0 Severe  Errors
