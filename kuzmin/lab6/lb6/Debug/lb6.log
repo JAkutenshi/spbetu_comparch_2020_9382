@@ -1,0 +1,4 @@
+﻿  Assembling func2.asm...
+  main.cpp
+c:\users\дмитрий\vs projects\lb6\lb6\main.cpp(63): warning C4101: h: неиспользованная локальная переменная
+  lb6.vcxproj -> C:\Users\Дмитрий\vs projects\lb6\Debug\lb6.exe
