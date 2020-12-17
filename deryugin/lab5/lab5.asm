@@ -12,6 +12,18 @@ CODE SEGMENT
 	ASSUME CS:CODE, DS:DATA, SS:ASTACK
 
 SUBR_INT PROC FAR
+	jmp CONTINUE
+			SAVE_SS dw 1 (0)
+		SAVE_SP dw 1 (0)
+		SAVE_AX dw 1 (0)
+		interruptStack dw 10 dup(0)
+	CONTINUE:
+	mov SAVE_SS, ss
+	mov SAVE_SP, sp
+	mov SAVE_AX, ax
+	mov ax, interruptStack
+	mov ss, ax
+	mov ax, SAVE_AX
 	PUSH AX
 	PUSH DX
 	MOV DX, OFFSET message
@@ -19,6 +31,13 @@ SUBR_INT PROC FAR
 	INT 21H
 	POP DX
 	POP AX
+	
+	mov SAVE_AX,AX
+	mov AX,SAVE_SS
+	mov SS,AX
+	mov SP,SAVE_SP
+	mov AX,SAVE_AX
+	
 	MOV AL, 20H
 	OUT 20H, AL
 	IRET
