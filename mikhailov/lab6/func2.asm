@@ -1,3 +1,4 @@
+.386
 .MODEL flat, C 
 .CODE 
 func2 PROC C one_step_intervals_dist : ptr dword, left_borders : ptr dword, dist : ptr dword, x_min : dword, x_max : dword 

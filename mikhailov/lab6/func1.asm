@@ -1,3 +1,4 @@
+.386
 .MODEL flat, C 
 .CODE 
 func1 PROC C random_numbers : ptr dword, one_step_intervals_dist : ptr dword, number_of_random_numbers : dword, x_min : dword 
