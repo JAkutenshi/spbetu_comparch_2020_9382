@@ -4,8 +4,9 @@ STACKSG	ENDS
 
 DATASG  SEGMENT  PARA 'Data'; SEG DATA
 	KEEP_CS DW 0 ;
-        MESSAGE1 DB 'Transformation to string: $'
-        MESSAGE2 DB 'Transformation from string to digit and back: $'
+        MESSAGE1 DB 'Transformation to string: ax= $'
+        MESSAGE2 DB 'Transformation from string to digit and back: ax= $'
+		MESSAGE3 DB 'h$'
 	STRING DB 35 DUP('0')
 DATASG	ENDS; ENDS DATA
 
@@ -14,7 +15,9 @@ CODE SEGMENT; SEG CODE
 ASSUME  DS:DataSG, CS:Code, SS:STACKSG
 ;0…+65 535
 
-DEC_TO_HEX PROC NEAR
+STR_TO_HEX PROC NEAR
+	mov bp, sp
+	mov ax, [bp+4]
 	jmp start
 	delete_nul DW 0; нужна для того, чтобы не писать впереди стоящие нули
 start:
@@ -31,7 +34,7 @@ check_nul: ;служит для определения необходимост�
 
 scan_ax:
 	mov SI,AX ; записываем в si, ax
-	mov	cx, 4		; в слове 4 ниббла (полубайта)
+	mov	cx, 4		; в слове 4  (полубайта)
 
 next_char:
 	rol	ax, 1		; выдвигаем младшие 4 бита
@@ -43,8 +46,8 @@ next_char:
 	cmp	al, 0Ah		; сравниваем AL со значением 10
 	sbb	al, 69h		; целочисленное вычитание с заёмом
 	das			; BCD-коррекция после вычитания
-	cmp al, '0' ;если нуль
-	je check_nul
+	;cmp al, '0' ;если нуль
+	;je check_nul
 	mov delete_nul, 1; если попалась цифра, отличная от нуля, то остальные нули будут значащими
 
 no_skip_char:
@@ -64,9 +67,12 @@ end_1: ; когда прошли все регистры
 	mov STRING[DI],'$' ; добавляем в конец строки символ конца строки
 	mov DX,offset STRING ; записываем в dx сдвиг строки
 	ret
-DEC_TO_HEX ENDP	
+STR_TO_HEX ENDP	
 
-HEX_TO_DEC PROC FAR
+
+
+
+HEX_TO_STR PROC FAR
 
 	mov AX,0; обнуляем ax и cx
 	mov CX, 0
@@ -110,7 +116,7 @@ bukva:
 
 end_2:
 	ret
-HEX_TO_DEC ENDP
+HEX_TO_STR ENDP
 
 
 Main PROC FAR
@@ -120,10 +126,11 @@ Main PROC FAR
         mov DX, offset MESSAGE1 ;вывод первого сообщения
         mov ah,09h;
 	int 21h;
-	mov AX, 9999h ;наше число
-	call DEC_TO_HEX
+	mov AX, 3330h ;наше число
+	push ax
+	call STR_TO_HEX
 	mov ah,09h ;вывод строки
-	int 21h;
+	int 21h
 	
 	mov dl, 10;возврат каретки 
 	mov ah, 02h
@@ -136,12 +143,16 @@ Main PROC FAR
         mov ah,09h;
 	int 21h;
 	mov ax, 0
-	call HEX_TO_DEC
-	call DEC_TO_HEX
+	call HEX_TO_STR
+
+	push ax
+	call STR_TO_HEX
 
 	mov ah,09h ;вывод строки
 	int 21h
-
+	mov DX, offset MESSAGE3 ;вывод второго сообщения
+        mov ah,09h;
+	int 21h;
 	mov ah,4Ch;завершение
 	int 21h;
 	
