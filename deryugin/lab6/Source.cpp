@@ -57,10 +57,10 @@ int main() {
 	for (int i = 0; i < xMax - xMin + 1; i++) oncefrequency[i] = 0;
 
 	for (int i = 0; i < array_length; i++) {
-		cout << "random numbers:\n";
 		array[i] = xMin + rand() % (xMax - xMin + 1);
 	}
 
+	cout << "random numbers:\n";
 	for (int i = 0; i < array_length; i++) cout << array[i] << " ";
 	cout << endl;
 
@@ -79,8 +79,9 @@ int main() {
 	ofstream fout;
 	fout.open("file.txt");
 	for (int i = 0; i < countOfBorders + 1; i++) {
-		if (i == countOfBorders) fout <<"¹"<< i + 1 << " " << xMin + LGrInt[i] - 1<< " " << result[i] << endl;
-		else fout << "¹"<< i + 1 << " " <<"	" << xMin + LGrInt[i] <<" " << result[i] << endl;
+		if (i == 0) fout << "¹" << i + 1 << " [" << xMin << "; " << xMin + LGrInt[i] << ") " << result[i] << endl;
+		else if (i == countOfBorders)  fout << "¹" << i + 1 << " [" << xMin + LGrInt[i - 1] << "; " << xMin + LGrInt[i] - 1 << "] " << result[i] << endl;
+		else  fout << "¹" << i + 1 << " [" << xMin + LGrInt[i - 1] << "; " << xMin + LGrInt[i] << ") " << result[i] << endl;
 	}
 	fout.close();
 
