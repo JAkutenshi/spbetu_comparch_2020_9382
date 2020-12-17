@@ -78,11 +78,18 @@ int main() {
 
 	ofstream fout;
 	fout.open("file.txt");
-	for (int i = 0; i < countOfBorders + 1; i++) {
-		if (i == 0) fout << "¹" << i + 1 << " [" << xMin << "; " << xMin + LGrInt[i] << ") " << result[i] << endl;
-		else if (i == countOfBorders)  fout << "¹" << i + 1 << " [" << xMin + LGrInt[i - 1] << "; " << xMin + LGrInt[i] - 1 << "] " << result[i] << endl;
-		else  fout << "¹" << i + 1 << " [" << xMin + LGrInt[i - 1] << "; " << xMin + LGrInt[i] << ") " << result[i] << endl;
+	if (LGrInt[0] ==0) 
+	for (int i = 1; i < countOfBorders + 1; i++) {
+		if (i == 0) cout << "" << i + 1 << " [" << xMin << "; " << xMin + LGrInt[i] << ") " << result[i] << endl;
+		else if (i == countOfBorders)  cout << "" << i + 1 << " [" << xMin + LGrInt[i - 1] << "; " << xMin + LGrInt[i] - 1 << "] " << result[i] << endl;
+		else  cout << "" << i + 1 << " [" << xMin + LGrInt[i - 1] << "; " << xMin + LGrInt[i] << ") " << result[i] << endl;
 	}
+	else 
+		for (int i = 0; i < countOfBorders + 1; i++) {
+			if (i == 0) cout << "" << i + 1 << " [" << xMin << "; " << xMin + LGrInt[i] << ") " << result[i] << endl;
+			else if (i == countOfBorders)  cout << "" << i + 1 << " [" << xMin + LGrInt[i - 1] << "; " << xMin + LGrInt[i] - 1 << "] " << result[i] << endl;
+			else  cout << "" << i + 1 << " [" << xMin + LGrInt[i - 1] << "; " << xMin + LGrInt[i] << ") " << result[i] << endl;
+		}
 	fout.close();
 
 	return 0;
