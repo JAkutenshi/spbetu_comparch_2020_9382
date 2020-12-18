@@ -1,0 +1,75 @@
+Microsoft (R) Macro Assembler Version 14.24.28316.0	    12/17/20 07:56:53
+module.asm						     Page 1 - 1
+
+
+				.386
+				.model flat, C
+ 00000000			.code
+ 00000000			poisk proc public, NumRanDat:dword, arr:ptr dword, RG:ptr dword, kol:ptr dword, NInt:dword
+ 00000003  8B 4D 08		mov ecx, NumRanDat ;помещение в регистр ecx значения количества псевдослучайных чисел в массиве
+ 00000006  BE 00000000		mov esi,0 ;помещение в регистр esi значение 0, данный регистр бу-дет использоваться в качестве счетчика
+ 0000000B			Chislo: ;метка для получения числа из массива псевдослучайных чисел
+ 0000000B  8B 45 0C		mov eax,arr ;помещение в регистр eax начала массва псевдослучайных чисел
+ 0000000E  8B 04 B0		mov eax,[eax+esi*4] ;обращение к ячейке массива псевдослучайных чи-сел, с использованием счетчика esi
+ 00000011  BA FFFFFFFF		mov edx,-1 ;помещение в регистр edx значение -1
+ 00000016			Interval:
+ 00000016  42			inc edx ;увеличение на 1 значения регистра, обнуление регистра edx
+ 00000017  8B 5D 10		mov ebx,RG ;помещение в регистр ebx начала массива границ
+ 0000001A  8B 1C 93		mov ebx,[ebx+edx*4] ;обращение к ячейке массива границ с индексом edx
+ 0000001D  3B C3		cmp eax,ebx ;сравнение псевдослучайного числа с границей
+ 0000001F  7F F5		jg Interval ;переход если число больше
+ 00000021  8B 5D 14		mov ebx,kol ;помещение в регистр ebx начала массива повторений
+ 00000024  8B 04 93		mov eax,[ebx+edx*4] ;помещение в регистр значения ячейки с индексом edx
+ 00000027  40			inc eax ;увеличение на 1 значения
+ 00000028  89 04 93		mov [ebx+edx*4],eax ;помещние значения в ячейку с индексом edx
+ 0000002B  46			inc esi ;увеличение счетчика
+ 0000002C  E2 DD		Loop Chislo
+				ret
+ 00000030			poisk endp
+module.asm(24) : warning A6004:procedure argument or local not referenced : NInt
+				end
+Microsoft (R) Macro Assembler Version 14.24.28316.0	    12/17/20 07:56:53
+module.asm						     Symbols 2 - 1
+
+
+
+
+Segments and Groups:
+
+                N a m e                 Size     Length   Align   Combine Class
+
+FLAT . . . . . . . . . . . . . .	GROUP
+_DATA  . . . . . . . . . . . . .	32 Bit	 00000000 DWord	  Public  'DATA'	
+_TEXT  . . . . . . . . . . . . .	32 Bit	 00000030 DWord	  Public  'CODE'	
+
+
+Procedures, parameters, and locals:
+
+                N a m e                 Type     Value    Attr
+
+poisk  . . . . . . . . . . . . .	P Near	 00000000 _TEXT	Length= 00000030 Public C
+  NumRanDat  . . . . . . . . . .	DWord	 bp + 00000008
+  arr  . . . . . . . . . . . . .	DWord	 bp + 0000000C
+  RG . . . . . . . . . . . . . .	DWord	 bp + 00000010
+  kol  . . . . . . . . . . . . .	DWord	 bp + 00000014
+  NInt . . . . . . . . . . . . .	DWord	 bp + 00000018
+  Chislo . . . . . . . . . . . .	L Near	 0000000B _TEXT	
+  Interval . . . . . . . . . . .	L Near	 00000016 _TEXT	
+
+
+Symbols:
+
+                N a m e                 Type     Value    Attr
+
+@CodeSize  . . . . . . . . . . .	Number	 00000000h   
+@DataSize  . . . . . . . . . . .	Number	 00000000h   
+@Interface . . . . . . . . . . .	Number	 00000001h   
+@Model . . . . . . . . . . . . .	Number	 00000007h   
+@code  . . . . . . . . . . . . .	Text   	 _TEXT
+@data  . . . . . . . . . . . . .	Text   	 FLAT
+@fardata?  . . . . . . . . . . .	Text   	 FLAT
+@fardata . . . . . . . . . . . .	Text   	 FLAT
+@stack . . . . . . . . . . . . .	Text   	 FLAT
+
+	   1 Warnings
+	   0 Errors

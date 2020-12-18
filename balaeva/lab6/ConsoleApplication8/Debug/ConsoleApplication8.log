@@ -1,0 +1,3 @@
+﻿  Assembling module.asm...
+module.asm(24): warning A6004: procedure argument or local not referenced : NInt
+  ConsoleApplication8.vcxproj -> C:\Users\User\source\repos\ConsoleApplication8\Debug\ConsoleApplication8.exe
