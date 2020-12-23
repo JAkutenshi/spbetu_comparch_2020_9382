@@ -1,0 +1,43 @@
+page 120, 200; Main module
+EXTRN INT_TO_STR:NEAR; Defined in mod2.asm
+EXTRN STR_TO_INT:FAR; Defined in mod2.asm
+PUBLIC OUT_STR
+; uint 16 bit HEX 
+STA_CK SEGMENT STACK
+	DW 20 DUP(0)
+STA_CK ENDS
+
+DATA SEGMENT
+	INP_INT DW 57005; Int32
+	OUT_STR DB 4 DUP(0), '$'; String (length=32)
+DATA ENDS
+
+CODE SEGMENT  PUBLIC
+	ASSUME CS:CODE, DS:DATA, SS:STA_CK
+
+MAIN PROC FAR
+	PUSH DS; PSP
+	XOR AX,AX
+	PUSH AX
+
+	MOV AX, DATA ; Load DS
+	MOV DS, AX
+	MOV ES, AX ; For STOSB and LODSB.
+
+	MOV AX, WORD PTR INP_INT; low part 32 number
+	CALL INT_TO_STR; Int to string
+
+	LEA DX, OUT_STR ; Output string
+	MOV AH, 09H ; Stdout
+	INT 21H ; Call
+
+	PUSH DX; String to stack
+	CALL FAR PTR STR_TO_INT; String to int
+	ADD SP, 2; Clear temp
+
+	RET
+MAIN ENDP
+
+CODE ENDS
+
+	END MAIN
