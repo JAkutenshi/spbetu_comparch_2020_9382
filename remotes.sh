@@ -16,7 +16,7 @@ git remote add MilanaBalaeva             https://github.com/MilanaBalaeva/spbetu
 git remote add sergeyyurev               https://github.com/sergeyyurev/spbetu_comparch_2020_9382.git        # Юрьев  
 git remote add Ryzhikh-Roman             https://github.com/Ryzhikh-Roman/spbetu_comparch_2020_9382.git      # Рыжих  
 git remote add NereusOcean               https://github.com/NereusOcean/spbetu_comparch_2020_9382.git        # Иерусалимов
-#git remote add                           https://github.com//spbetu_comparch_2020_9382.git                  # 
+git remote add tehril17                  https://github.com/tehril17/spbetu_comparch_2020_9382.git           # Докукин 
 #git remote add                           https://github.com//spbetu_comparch_2020_9382.git                  # 
 #git remote add                           https://github.com//spbetu_comparch_2020_9382.git                  # 
 #git remote add                           https://github.com//spbetu_comparch_2020_9382.git                  # 
