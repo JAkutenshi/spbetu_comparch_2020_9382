@@ -1,0 +1,6 @@
+Generated pseudo-random numbers:
+0 -1 -1 -1 -1 0 -1 -1 0 -1 
+
+# of intervals	lower bound	count
+     1		    -1		   7
+     2		    0		   3
