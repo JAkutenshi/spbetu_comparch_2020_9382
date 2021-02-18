@@ -1,0 +1,9 @@
+Generated pseudo-random numbers:
+37 32 34 16 9 87 25 84 50 92 97 88 38 50 89 19 22 96 4 93 
+
+# of intervals	lower bound	count
+     1		    20		   16
+     2		    40		   10
+     3		    60		   8
+     4		    80		   8
+     5		    100		   0
