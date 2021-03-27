@@ -4,7 +4,7 @@
 #include <random>
 
 int64_t getRandomNum(int64_t min, int64_t max) {
-    return min + rand() % (max - min);
+    return min + rand() % (max - min + 1);
 }
 
 void fillArray(int64_t size, int64_t *arr, int64_t min, int64_t max) {
@@ -18,8 +18,22 @@ void initArray(int64_t size, int64_t *arr) {
 }
 
 void readArray(int64_t size, int64_t *arr) {
-    for (int i = 1; i < size; i++)
+
+
+    for (int i = 1; i < size; i++) {
         std::cin >> arr[i];
+        if (arr[i] <= arr[i - 1]) {
+            std::cout << "Неверный промежуток --> [" << arr[i - 1] << "," << arr[i] << ")" << std::endl;
+            std::cout << "Введите заново" << std::endl;
+            i--;
+        }
+
+        if (arr[i] >= arr[size]) {
+            std::cout << "Левая граница больше максимума" << std::endl;
+            std::cout << "Введите заново" << std::endl;
+            i--;
+        }
+    }
 }
 
 void printArray(int64_t size, int64_t *arr) {
@@ -30,12 +44,17 @@ void printArray(int64_t size, int64_t *arr) {
 }
 
 void printBordersAndCounts(int64_t size, int64_t *arr, int64_t *res) {
-    for (int64_t i = 0; i < size; i++) {
+    int64_t i = 0;
+    for (i = 0; i < size - 1; i++) {
         std::cout << "Промежуток : [" << arr[i] << "," << arr[i + 1] << ") --> Попаданий : " << res[i];
         std::cout << std::endl;
     }
+    std::cout << "Промежуток : [" << arr[i] << "," << arr[i + 1] - 1 << "] --> Попаданий : " << res[i];
+    std::cout << std::endl;
 
-}void printToFile(int64_t size, int64_t *arr, int64_t *res) {
+}
+
+void printToFile(int64_t size, int64_t *arr, int64_t *res) {
 
 
     std::ofstream res_file("res.txt");
@@ -73,7 +92,18 @@ int main() {
 
 
     std::cout << "Введите кол-во разделителей" << std::endl;
-    std::cin >> borders_size;
+    std::cout << "Максимальное число разделителей для промежутка [" << Left_lim << "," << Rihgt_lim << "]" << ":->"
+              << Rihgt_lim - Left_lim << std::endl;
+
+
+    int k = Rihgt_lim - Left_lim;
+    borders_size = k+1;
+
+    while (borders_size > k) {
+        std::cin >> borders_size;
+        if(borders_size>k)
+            std::cout<<"Кол-во прмежутков польше максимального"<<std::endl;
+    }
 
     borders_size++;
 
@@ -81,9 +111,20 @@ int main() {
     initArray(borders_size, borders);
 
     std::cout << "Введите массив разделителей" << std::endl;
-    readArray(borders_size, borders);
+
+    //////////////////////////////
     borders[0] = Left_lim;
-    borders[borders_size] = Rihgt_lim;
+
+    //borders[0] = Left_lim-1;
+
+
+
+    borders[borders_size] = Rihgt_lim + 1;
+
+    readArray(borders_size, borders);
+
+
+    //borders[borders_size-1]++;
 
     int64_t res[borders_size];
     initArray(borders_size, res);
@@ -97,3 +138,4 @@ int main() {
     printToFile(borders_size, borders, res);
 
 }
+
